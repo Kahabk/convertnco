@@ -3,7 +3,7 @@ import FigmaServiceCard from "./FigmaServiceCard";
 import PromoTicket from "./PromoTicket";
 
 const FEATURE_IMAGE = new URL(
-  "../../new.jpg",
+  "../../t.jpg",
   import.meta.url,
 ).href;
 
