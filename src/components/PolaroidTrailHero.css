@@ -1,0 +1,385 @@
+/* 
+ * PolaroidTrailHero.css
+ * Styles for the pure black interactive Polaroid cursor trail hero section.
+ */
+
+.polaroidHeroContainer {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: #000000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* Base64 Noise Overlay for authentic analog photo/film grain texture */
+.polaroidNoise {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* Header & Footer styling (minimalistic, aligned with Immersive UI) */
+.pHeader {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.pLogo {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  overflow: visible;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.pLogoImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70px;
+  height: 88px;
+  max-width: none;
+  transform: translate(-50%, -48%);
+  object-fit: contain;
+}
+
+.pNav {
+  display: flex;
+  gap: 40px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  pointer-events: auto;
+}
+
+.pNavLink {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.pNavLink:hover {
+  color: #ffffff;
+}
+
+/* Oversized editorial typography inspired by the supplied layout reference */
+.staticHeroCenter {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+.editorialTitle {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  letter-spacing: -0.06em;
+  line-height: 0.66;
+  color: #f5f5f3;
+}
+
+.editorialWord {
+  position: absolute;
+  display: block;
+  white-space: nowrap;
+}
+
+.editorialGlobal {
+  top: 19%;
+  left: 23%;
+  font-size: clamp(4.5rem, 8vw, 8rem);
+}
+
+.editorialCreative {
+  top: 39%;
+  left: 36%;
+  font-size: clamp(4.75rem, 8.5vw, 8.5rem);
+}
+
+.editorialStudio {
+  right: auto;
+  left: 56%;
+  top: 59%;
+  bottom: auto;
+  font-size: clamp(4.75rem, 8.5vw, 8.5rem);
+}
+
+.editorialNote {
+  position: absolute;
+  margin: 0;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.72);
+  font-family: "Inter", Arial, sans-serif;
+  font-size: clamp(0.62rem, 0.9vw, 0.8rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.editorialNoteTop {
+  top: 30%;
+  left: 47%;
+}
+
+.editorialNoteBottom {
+  left: 47%;
+  top: 70%;
+  bottom: auto;
+}
+
+/* Trail Area */
+.trailCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2; /* Sits above centered title but below headers/footers */
+  pointer-events: none; /* Mouse moves can bypass this */
+}
+
+/* Morphing Interactive Spotlight Image Card styling */
+.trailImageCard {
+  position: absolute;
+  left: 0;
+  top: 0;
+  --card-w: 300px;
+  --card-h: 220px;
+  height: var(--card-h);
+  width: var(--card-w);
+  pointer-events: none;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  /* Hardware accelerated drop shadow that perfectly conforms to the active clip-path shape! */
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.85));
+  animation: cardLife 4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Sharp lens mask clipping the image spotlight (unveils instead of scaling the image) */
+.trailImageMask {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  will-change: clip-path;
+  animation: maskLife 4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.trailImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  will-change: filter;
+  animation: imageFilterLife 4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 3D Translation & perspective scale keyframes: lens pop-in -> drift -> elegant exit */
+@keyframes cardLife {
+  0% {
+    transform: translate3d(var(--x), var(--y), 0) translate(-50%, -50%) scale(0.1) rotate(var(--rot-start)) translateZ(-100px);
+    opacity: 0;
+  }
+  /* 15%: Rapidly expands from a point to full scale, following the mouse direction */
+  15% {
+    transform: translate3d(var(--x), var(--y), 0) translate(-50%, -50%) scale(1) rotate(var(--rot)) translateZ(0px);
+    opacity: 1;
+  }
+  /* 40%: Smoothly drifts and follows the mouse cursor's acceleration */
+  40% {
+    transform: translate3d(var(--x), calc(var(--y) + 3px), 0) translate(-50%, -50%) scale(1.02) rotate(var(--rot)) translateZ(10px);
+    opacity: 1;
+  }
+  /* 40% to 100%: Long, slow, ultra-smooth deceleration slide and beautiful fading away */
+  100% {
+    transform: translate3d(var(--x), calc(var(--y) + 20px), 0) translate(-50%, -50%) scale(0.97) rotate(var(--rot-end)) translateZ(-15px);
+    opacity: var(--opacity, 0);
+  }
+}
+
+/* Clip-path mask: single-step rapid circular expansion from a single point directly into the full sharp-cornered image */
+@keyframes maskLife {
+  0% {
+    clip-path: circle(0px at 50% 50%);
+  }
+  /* 18%: Snappily and continuously expands the circle past the bounds to cleanly reveal the sharp original image corners */
+  18% {
+    clip-path: circle(350px at 50% 50%);
+  }
+  100% {
+    clip-path: circle(350px at 50% 50%);
+  }
+}
+
+@keyframes imageFilterLife {
+  0% {
+    filter: contrast(105%) brightness(95%) grayscale(0%);
+  }
+  100% {
+    filter: contrast(105%) brightness(95%) grayscale(0%);
+  }
+}
+
+/* Footer Section */
+.pFooter {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.pFooterLeft {
+  display: flex;
+  gap: 64px;
+}
+
+.pFooterCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.pFooterColLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 8px;
+}
+
+.pFooterColText {
+  font-size: 0.75rem;
+  color: #e5e5e5;
+}
+
+.pFooterColLinks {
+  display: flex;
+  gap: 16px;
+  font-size: 0.75rem;
+  color: #e5e5e5;
+  pointer-events: auto;
+}
+
+.pFooterRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.pScrollLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 8px;
+}
+
+.pScrollIndicator {
+  height: 48px;
+  width: 1px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .pHeader {
+    padding: 24px;
+  }
+  
+  .pNav {
+    display: none; /* Clear mobile clutter */
+  }
+
+  .trailImageCard {
+    --card-w: 180px;
+    --card-h: 120px;
+  }
+
+  .editorialGlobal {
+    top: 24%;
+    left: 6%;
+    font-size: clamp(3.5rem, 18vw, 5.5rem);
+  }
+
+  .editorialCreative {
+    top: 40%;
+    left: 8%;
+    font-size: clamp(3.5rem, 18vw, 5.5rem);
+  }
+
+  .editorialStudio {
+    right: 6%;
+    top: 56%;
+    bottom: auto;
+    font-size: clamp(3.5rem, 18vw, 5.5rem);
+  }
+
+  .editorialNoteTop {
+    top: 35%;
+    left: auto;
+    right: 7%;
+  }
+
+  .editorialNoteBottom {
+    left: 7%;
+    top: 69%;
+    bottom: auto;
+  }
+
+  .pFooter {
+    padding: 24px;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .pFooterLeft {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .pFooterColLinks {
+    justify-content: center;
+  }
+
+  .pFooterRight {
+    align-items: center;
+  }
+}
