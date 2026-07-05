@@ -1,4 +1,6 @@
 import "./PostHeroSections.css";
+import FigmaServiceCard from "./FigmaServiceCard";
+import PromoTicket from "./PromoTicket";
 
 const FEATURE_IMAGE = new URL(
   "../../new.jpg",
@@ -7,14 +9,19 @@ const FEATURE_IMAGE = new URL(
 
 const PROJECTS = [
   {
-    image: new URL("../../imgeasset/d47032c62e93f8abb0f2ad4f08965fce.jpg", import.meta.url).href,
-    title: "Shopify Growth Engine",
-    category: "Store design · Development · CRO",
+    image: new URL("../../web_aset/Screenshot from 2026-07-05 17-03-46.png", import.meta.url).href,
+    title: "Sneaker Commerce Experience",
+    category: "Shopify design · Development · CRO",
   },
   {
-    image: new URL("../../imgeasset/fecb7ff6829c90de6d7872ff64acc900.jpg", import.meta.url).href,
-    title: "AI Product Launch",
-    category: "Creative · Paid media · Automation",
+    image: new URL("../../web_aset/Screenshot from 2026-07-05 17-08-01.png", import.meta.url).href,
+    title: "Dark Sneaker Product Page",
+    category: "Ecommerce · Product advertising · Art direction",
+  },
+  {
+    image: new URL("../../web_aset/bf3296fd6e1fa88ffb50a9567150fb56.jpg", import.meta.url).href,
+    title: "Lucir Fashion Store",
+    category: "Ecommerce · Art direction · Campaign",
   },
 ];
 
@@ -124,6 +131,8 @@ export default function PostHeroSections() {
             </article>
           ))}
         </div>
+
+        <FigmaServiceCard />
       </section>
 
       <section className="automationSection">
@@ -188,13 +197,73 @@ export default function PostHeroSections() {
 
       <section className="studioSection" id="studio">
         <p className="sectionKicker">Your next move</p>
-        <h2>Ready to build a brand<br />that sells while you sleep?</h2>
-        <a href="mailto:hello@example.com">Tell us about your project <span>↗</span></a>
+        <div className="studioPitch">
+          <h2>Ready to build a brand<br />that sells while you sleep?</h2>
+          <PromoTicket />
+        </div>
+        <a href="mailto:hello.creativestudio@gmail.com">Tell us about your project <span>↗</span></a>
+      </section>
+
+      <section className="contactSection" id="contact">
+        <div className="contactIntro">
+          <p className="sectionKicker">Contact us</p>
+          <h2>Let’s build what’s<br />next, together.</h2>
+          <div className="contactDirect">
+            <span>Prefer email?</span>
+            <a href="mailto:hello.creativestudio@gmail.com">hello.creativestudio@gmail.com</a>
+          </div>
+        </div>
+
+        <form className="contactForm" action="mailto:hello.creativestudio@gmail.com" method="post" encType="text/plain">
+          <label className="contactField">
+            <span>Your name</span>
+            <span className="glowInputShell">
+              <input type="text" name="name" placeholder="Name" required />
+            </span>
+          </label>
+          <label className="contactField">
+            <span>Email address</span>
+            <span className="glowInputShell">
+              <input type="email" name="email" placeholder="you@company.com" required />
+            </span>
+          </label>
+          <label className="contactField">
+            <span>Company name</span>
+            <span className="glowInputShell">
+              <input type="text" name="company" placeholder="Company" />
+            </span>
+          </label>
+          <label className="contactField">
+            <span>Service needed</span>
+            <span className="glowInputShell">
+              <select name="service" defaultValue="">
+                <option value="" disabled>Select a service</option>
+                <option>Shopify website</option>
+                <option>AI automation</option>
+                <option>Product advertising</option>
+                <option>Digital marketing</option>
+              </select>
+            </span>
+          </label>
+          <label className="contactField">
+            <span>Project budget</span>
+            <span className="glowInputShell">
+              <input type="text" name="budget" placeholder="Your estimated budget" />
+            </span>
+          </label>
+          <label className="contactField contactFieldWide">
+            <span>Tell us about the project</span>
+            <span className="glowInputShell glowTextareaShell">
+              <textarea name="project" placeholder="Goals, challenges and timeline..." required />
+            </span>
+          </label>
+          <button className="contactSubmit" type="submit"><span>Send enquiry</span><span>↗</span></button>
+        </form>
       </section>
 
       <footer className="siteFooter">
         <p>© 2026 Creative Studio</p>
-        <div><a href="#works">Work</a><a href="#services">Services</a><a href="#studio">Contact</a></div>
+        <div><a href="#works">Work</a><a href="#services">Services</a><a href="#contact">Contact</a></div>
         <a href="#polaroid-hero-container">Back to top ↑</a>
       </footer>
     </main>
