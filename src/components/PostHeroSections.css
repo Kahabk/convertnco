@@ -283,6 +283,10 @@
   filter: none;
 }
 
+.logoItem img.logoImageN8n {
+  transform: scale(1.45);
+}
+
 @keyframes logoScroll {
   to { transform: translateX(-50%); }
 }

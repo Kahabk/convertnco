@@ -34,7 +34,11 @@ const LOGOS = [
   "Group 142.png",
   "Group 143.png",
   "Group 144.png",
-].map((fileName) => new URL(`../../logos/${fileName}`, import.meta.url).href);
+  "n8n-logo.png",
+].map((fileName) => ({
+  fileName,
+  src: new URL(`../../logos/${fileName}`, import.meta.url).href,
+}));
 
 const STORY_IMAGE = new URL(
   "../../imgeasset/2b8cce776b5f51248b9e159e2f7d3245.jpg",
@@ -106,8 +110,12 @@ export default function PostHeroSections() {
         <div className="logoMarquee">
           <div className="logoTrack">
             {[...LOGOS, ...LOGOS].map((logo, index) => (
-              <div className="logoItem" key={`${logo}-${index}`} aria-hidden={index >= LOGOS.length}>
-                <img src={logo} alt={index < LOGOS.length ? "Partner logo" : ""} />
+              <div className="logoItem" key={`${logo.src}-${index}`} aria-hidden={index >= LOGOS.length}>
+                <img
+                  className={logo.fileName === "n8n-logo.png" ? "logoImageN8n" : undefined}
+                  src={logo.src}
+                  alt={index < LOGOS.length ? "Partner logo" : ""}
+                />
               </div>
             ))}
           </div>
