@@ -5,8 +5,8 @@
 # Creative Agency Portfolio
 
 A responsive, motion-led agency website for Shopify development, AI automation, product advertising.
-## Founder : Mohammed Febin 
-## Co-Founder : Mohammed Kahab K
+## Founder : Mohammed Febin CEO
+## Co-Founder : Mohammed Kahab K CTO
 ## Highlights
 
 - Interactive image-trail hero
