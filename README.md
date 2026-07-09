@@ -4,7 +4,7 @@
 
 # Creative Agency Portfolio
 
-A responsive, motion-led agency website for Shopify development, AI automation, product advertising
+A responsive, motion-led agency website for Shopify development, AI automation, product advertising.
 
 ## Highlights
 
@@ -17,6 +17,7 @@ A responsive, motion-led agency website for Shopify development, AI automation, 
 - Holographic promotional ticket (display-only demo)
 - Responsive contact form with direct email link
 - Mobile layouts and reduced-motion support
+- High qulty primum web
 
 ## Tech stack
 
