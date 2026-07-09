@@ -70,4 +70,4 @@ t.jpg                         Featured banner image
 - Add partner logos in `logos/`, then update the `LOGOS` list.
 - Hero trail imagery is configured in `PolaroidTrailHero.tsx`.
 
-The `DEMO50` ticket is a visual demonstration and is not a real commercial offer.
+
