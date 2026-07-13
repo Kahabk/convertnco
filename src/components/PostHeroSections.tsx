@@ -1,25 +1,28 @@
 import "./PostHeroSections.css";
+import { FormEvent } from "react";
 import FigmaServiceCard from "./FigmaServiceCard";
 import PromoTicket from "./PromoTicket";
 
-const FEATURE_IMAGE = new URL(
-  "../../new.jpg",
-  import.meta.url,
-).href;
+const CONTACT_EMAIL = "hello.creativestudio@gmail.com";
+const BASE_URL = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
+
+const assetUrl = (path: string) => `${BASE_URL}${path}`;
+
+const FEATURE_IMAGE = assetUrl("new.jpg");
 
 const PROJECTS = [
   {
-    image: new URL("../../web_aset/Screenshot from 2026-07-05 17-03-46.png", import.meta.url).href,
+    image: assetUrl("web_aset/Screenshot from 2026-07-05 17-03-46.png"),
     title: "Sneaker Commerce Experience",
     category: "Shopify design · Development · CRO",
   },
   {
-    image: new URL("../../web_aset/Screenshot from 2026-07-05 17-08-01.png", import.meta.url).href,
+    image: assetUrl("web_aset/Screenshot from 2026-07-05 17-08-01.png"),
     title: "Dark Sneaker Product Page",
     category: "Ecommerce · Product advertising · Art direction",
   },
   {
-    image: new URL("../../web_aset/bf3296fd6e1fa88ffb50a9567150fb56.jpg", import.meta.url).href,
+    image: assetUrl("web_aset/bf3296fd6e1fa88ffb50a9567150fb56.jpg"),
     title: "Lucir Fashion Store",
     category: "Ecommerce · Art direction · Campaign",
   },
@@ -37,13 +40,10 @@ const LOGOS = [
   "n8n-logo.png",
 ].map((fileName) => ({
   fileName,
-  src: new URL(`../../logos/${fileName}`, import.meta.url).href,
+  src: assetUrl(`logos/${fileName}`),
 }));
 
-const STORY_IMAGE = new URL(
-  "../../imgeasset/2b8cce776b5f51248b9e159e2f7d3245.jpg",
-  import.meta.url,
-).href;
+const STORY_IMAGE = assetUrl("imgeasset/2b8cce776b5f51248b9e159e2f7d3245.jpg");
 
 const SERVICES = [
   ["01", "Shopify websites", "Premium storefronts engineered for conversion and scale"],
@@ -60,11 +60,42 @@ const PROCESS = [
 ];
 
 export default function PostHeroSections() {
+  const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+    const name = String(data.get("name") || "").trim();
+    const email = String(data.get("email") || "").trim();
+    const company = String(data.get("company") || "").trim();
+    const service = String(data.get("service") || "").trim();
+    const budget = String(data.get("budget") || "").trim();
+    const project = String(data.get("project") || "").trim();
+
+    const subject = company ? `Project enquiry from ${company}` : "Project enquiry";
+    const body = [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      company && `Company: ${company}`,
+      service && `Service: ${service}`,
+      budget && `Budget: ${budget}`,
+      "",
+      "Project:",
+      project,
+    ].filter(Boolean).join("\n");
+
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
   return (
     <main className="postHero">
       <section className="featureSection" id="works">
         <div className="featureMedia">
-          <img src={FEATURE_IMAGE} alt="Featured creative campaign" />
+          <img
+            src={FEATURE_IMAGE}
+            alt="Featured creative campaign"
+            decoding="async"
+            fetchPriority="high"
+          />
           <a className="featureButton" href="#selected-work" aria-label="View selected work">
             <span>View</span>
             <span className="featureArrow">↘</span>
@@ -90,7 +121,7 @@ export default function PostHeroSections() {
           {PROJECTS.map((project, index) => (
             <article className="projectCard" key={project.title}>
               <div className="projectImageWrap">
-                <img src={project.image} alt={project.title} />
+                <img src={project.image} alt={project.title} loading="lazy" decoding="async" />
                 <span className="projectNumber">0{index + 2}</span>
               </div>
               <div className="projectMeta">
@@ -115,6 +146,8 @@ export default function PostHeroSections() {
                   className={logo.fileName === "n8n-logo.png" ? "logoImageN8n" : undefined}
                   src={logo.src}
                   alt={index < LOGOS.length ? "Partner logo" : ""}
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             ))}
@@ -178,7 +211,7 @@ export default function PostHeroSections() {
 
       <section className="storySection">
         <div className="storyImage">
-          <img src={STORY_IMAGE} alt="Creative product study" />
+          <img src={STORY_IMAGE} alt="Creative product study" loading="lazy" decoding="async" />
         </div>
         <div className="storyContent">
           <p className="sectionKicker">Why it works</p>
@@ -209,7 +242,7 @@ export default function PostHeroSections() {
           <h2>Ready to build a brand<br />that sells while you sleep?</h2>
           <PromoTicket />
         </div>
-        <a href="mailto:hello.creativestudio@gmail.com">Tell us about your project <span>↗</span></a>
+        <a href={`mailto:${CONTACT_EMAIL}`}>Tell us about your project <span>↗</span></a>
       </section>
 
       <section className="contactSection" id="contact">
@@ -218,11 +251,11 @@ export default function PostHeroSections() {
           <h2>Let’s build what’s<br />next, together.</h2>
           <div className="contactDirect">
             <span>Prefer email?</span>
-            <a href="mailto:hello.creativestudio@gmail.com">hello.creativestudio@gmail.com</a>
+            <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
           </div>
         </div>
 
-        <form className="contactForm" action="mailto:hello.creativestudio@gmail.com" method="post" encType="text/plain">
+        <form className="contactForm" onSubmit={handleContactSubmit}>
           <label className="contactField">
             <span>Your name</span>
             <span className="glowInputShell">

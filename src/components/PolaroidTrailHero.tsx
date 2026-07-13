@@ -1,7 +1,11 @@
 import { MouseEvent, useRef, useState, useEffect } from "react";
 import "./PolaroidTrailHero.css";
 
-const LOGO_IMAGE = new URL("../../wight_logo.png", import.meta.url).href;
+const BASE_URL = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
+const assetUrl = (path: string) => `${BASE_URL}${path}`;
+
+const LOGO_IMAGE = assetUrl("wight_logo.png");
+const MAX_TRAIL_CARDS = 16;
 
 /* =========================================================================
    POLAROID TRAIL CONFIGURATION & IMAGE SOURCES
@@ -9,27 +13,27 @@ const LOGO_IMAGE = new URL("../../wight_logo.png", import.meta.url).href;
 
 // Local campaign artwork used by the cursor-trail animation.
 const SAMPLE_IMAGES = [
-  new URL("../../imgeasset/0a18db22a60fd44f0c90518d113f7a87.jpg", import.meta.url).href,
-  new URL("../../imgeasset/1f045397a286958c144ae1d2bbb1073c.jpg", import.meta.url).href,
-  new URL("../../imgeasset/265fa7c04168cf6638834057ffb0cf10.jpg", import.meta.url).href,
-  new URL("../../imgeasset/2b8cce776b5f51248b9e159e2f7d3245.jpg", import.meta.url).href,
-  new URL("../../imgeasset/6288858dc3a59eb17103b372b73404c4.jpg", import.meta.url).href,
-  new URL("../../imgeasset/7c82250647ff00fd560d7d61edcea378.jpg", import.meta.url).href,
-  new URL("../../imgeasset/80d843730c13f82e5417e40a018edf3e.jpg", import.meta.url).href,
-  new URL("../../imgeasset/84dff778f24990afe2f73095dcf9574f.jpg", import.meta.url).href,
-  new URL("../../imgeasset/8675e9eef372a07acc60c941ac91ae00.jpg", import.meta.url).href,
-  new URL("../../imgeasset/93202b237771648e53b6848f5a12b5a4.jpg", import.meta.url).href,
-  new URL("../../imgeasset/9fa5909e9e3c57b6127a6fa0bcf042f5.jpg", import.meta.url).href,
-  new URL("../../imgeasset/d47032c62e93f8abb0f2ad4f08965fce.jpg", import.meta.url).href,
-  new URL("../../imgeasset/fecb7ff6829c90de6d7872ff64acc900.jpg", import.meta.url).href,
-  new URL("../../imgeasset/App-Icon.png", import.meta.url).href,
-  new URL("../../imgeasset/Notification.png", import.meta.url).href,
-  new URL("../../imgeasset/Notification (1).png", import.meta.url).href,
-  new URL("../../imgeasset/Notification (3).png", import.meta.url).href,
-  new URL("../../imgeasset/White.png", import.meta.url).href,
-  new URL("../../imgeasset/White (1).png", import.meta.url).href,
-  new URL("../../imgeasset/White (2).png", import.meta.url).href,
-];
+  "imgeasset/0a18db22a60fd44f0c90518d113f7a87.jpg",
+  "imgeasset/1f045397a286958c144ae1d2bbb1073c.jpg",
+  "imgeasset/265fa7c04168cf6638834057ffb0cf10.jpg",
+  "imgeasset/2b8cce776b5f51248b9e159e2f7d3245.jpg",
+  "imgeasset/6288858dc3a59eb17103b372b73404c4.jpg",
+  "imgeasset/7c82250647ff00fd560d7d61edcea378.jpg",
+  "imgeasset/80d843730c13f82e5417e40a018edf3e.jpg",
+  "imgeasset/84dff778f24990afe2f73095dcf9574f.jpg",
+  "imgeasset/8675e9eef372a07acc60c941ac91ae00.jpg",
+  "imgeasset/93202b237771648e53b6848f5a12b5a4.jpg",
+  "imgeasset/9fa5909e9e3c57b6127a6fa0bcf042f5.jpg",
+  "imgeasset/d47032c62e93f8abb0f2ad4f08965fce.jpg",
+  "imgeasset/fecb7ff6829c90de6d7872ff64acc900.jpg",
+  "imgeasset/App-Icon.png",
+  "imgeasset/Notification.png",
+  "imgeasset/Notification (1).png",
+  "imgeasset/Notification (3).png",
+  "imgeasset/White.png",
+  "imgeasset/White (1).png",
+  "imgeasset/White (2).png",
+].map(assetUrl);
 
 const STAGE_LABELS = [
   "MEMENTO",
@@ -73,6 +77,7 @@ interface PolaroidCardData {
 
 export default function PolaroidTrailHero() {
   const [cards, setCards] = useState<PolaroidCardData[]>([]);
+  const cardsRef = useRef<PolaroidCardData[]>([]);
   const zIndexCounterRef = useRef<number>(1);
   const imageIndexCounterRef = useRef<number>(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -131,6 +136,11 @@ export default function PolaroidTrailHero() {
       const dx = lerpedPosRef.current.x - lastSpawnPosRef.current.x;
       const dy = lerpedPosRef.current.y - lastSpawnPosRef.current.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (!isMouseMovingRef.current && cardsRef.current.length === 0) {
+        animationFrameId = requestAnimationFrame(tick);
+        return;
+      }
 
       // Update positions, velocity, gravity, and opacity of all cards in state inside tick()
       setCards((prev) => {
@@ -205,11 +215,16 @@ export default function PolaroidTrailHero() {
         });
 
         // Filter out dead cards dynamically (no timeout leaks)
-        const alive = updated.filter((card) => (now - card.createdAt < lifespan) && card.opacity > 0.01);
+        const alive = updated
+          .filter((card) => (now - card.createdAt < lifespan) && card.opacity > 0.01)
+          .slice(-MAX_TRAIL_CARDS);
 
         if (newCardToAppend) {
-          return [...alive, newCardToAppend];
+          const next = [...alive, newCardToAppend].slice(-MAX_TRAIL_CARDS);
+          cardsRef.current = next;
+          return next;
         }
+        cardsRef.current = alive;
         return alive;
       });
 
@@ -243,7 +258,7 @@ export default function PolaroidTrailHero() {
           <a className="pNavLink" href="#works">Works</a>
           <a className="pNavLink" href="#studio">Studio</a>
           <a className="pNavLink" href="#services">Services</a>
-          <a className="pNavLink" href="mailto:hello@example.com">Contact</a>
+          <a className="pNavLink" href="mailto:hello.creativestudio@gmail.com">Contact</a>
         </nav>
       </header>
 
@@ -285,6 +300,7 @@ export default function PolaroidTrailHero() {
                 className="trailImage"
                 referrerPolicy="no-referrer"
                 loading="lazy"
+                decoding="async"
               />
             </div>
           </div>
