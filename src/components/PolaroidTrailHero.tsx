@@ -1,4 +1,4 @@
-import { MouseEvent, useRef, useState, useEffect } from "react";
+import { MouseEvent, TouchEvent, useRef, useState, useEffect } from "react";
 import "./PolaroidTrailHero.css";
 
 const BASE_URL = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
@@ -6,6 +6,7 @@ const assetUrl = (path: string) => `${BASE_URL}${path}`;
 
 const LOGO_IMAGE = assetUrl("wight_logo.png");
 const MAX_TRAIL_CARDS = 16;
+const MAX_TRAIL_CARDS_MOBILE = 8;
 
 /* =========================================================================
    POLAROID TRAIL CONFIGURATION & IMAGE SOURCES
@@ -77,10 +78,12 @@ interface PolaroidCardData {
 
 export default function PolaroidTrailHero() {
   const [cards, setCards] = useState<PolaroidCardData[]>([]);
+  const [menuOpen, setMenuOpen] = useState(false);
   const cardsRef = useRef<PolaroidCardData[]>([]);
   const zIndexCounterRef = useRef<number>(1);
   const imageIndexCounterRef = useRef<number>(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const isMobileRef = useRef(typeof window !== "undefined" && window.innerWidth < 768);
 
   // References for ultra-smooth rendering calculations
   const mousePosRef = useRef({ x: 0, y: 0 });
@@ -89,16 +92,25 @@ export default function PolaroidTrailHero() {
   const isMouseMovingRef = useRef(false);
   const idleTimeoutRef = useRef<any>(null);
 
-  // Smooth mouse move handler - captures raw mouse coordinates
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+  // Track mobile viewport
+  useEffect(() => {
+    const handleResize = () => {
+      isMobileRef.current = window.innerWidth < 768;
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Shared coordinate processor for mouse & touch
+  const processPointerMove = (clientX: number, clientY: number) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    
+
     mousePosRef.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: clientX - rect.left,
+      y: clientY - rect.top,
     };
-    
+
     isMouseMovingRef.current = true;
 
     // Clear and reset the idle timer
@@ -106,6 +118,34 @@ export default function PolaroidTrailHero() {
     idleTimeoutRef.current = setTimeout(() => {
       isMouseMovingRef.current = false;
     }, 250);
+  };
+
+  // Smooth mouse move handler - captures raw mouse coordinates
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    processPointerMove(e.clientX, e.clientY);
+  };
+
+  // Touch move handler for mobile trail interaction
+  const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length > 0) {
+      const touch = e.touches[0];
+      processPointerMove(touch.clientX, touch.clientY);
+    }
+  };
+
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length > 0) {
+      const touch = e.touches[0];
+      processPointerMove(touch.clientX, touch.clientY);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    // Allow remaining cards to fade naturally
+    if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
+    idleTimeoutRef.current = setTimeout(() => {
+      isMouseMovingRef.current = false;
+    }, 100);
   };
 
   useEffect(() => {
@@ -122,12 +162,17 @@ export default function PolaroidTrailHero() {
     }
 
     const tick = () => {
-      // 1. Calculate lerped cursor coordinates (0.15 easing coefficient for gorgeous organic lag)
+      const mobile = isMobileRef.current;
+      const maxCards = mobile ? MAX_TRAIL_CARDS_MOBILE : MAX_TRAIL_CARDS;
+      const spawnDistance = mobile ? 50 : 65;
+      const lerpSpeed = mobile ? 0.2 : 0.15;
+
+      // 1. Calculate lerped cursor coordinates
       const prevX = lerpedPosRef.current.x;
       const prevY = lerpedPosRef.current.y;
 
-      lerpedPosRef.current.x += (mousePosRef.current.x - lerpedPosRef.current.x) * 0.15;
-      lerpedPosRef.current.y += (mousePosRef.current.y - lerpedPosRef.current.y) * 0.15;
+      lerpedPosRef.current.x += (mousePosRef.current.x - lerpedPosRef.current.x) * lerpSpeed;
+      lerpedPosRef.current.y += (mousePosRef.current.y - lerpedPosRef.current.y) * lerpSpeed;
 
       const mvx = lerpedPosRef.current.x - prevX;
       const mvy = lerpedPosRef.current.y - prevY;
@@ -145,12 +190,12 @@ export default function PolaroidTrailHero() {
       // Update positions, velocity, gravity, and opacity of all cards in state inside tick()
       setCards((prev) => {
         const now = Date.now();
-        const lifespan = 4000; // Match 4s animation
+        const lifespan = mobile ? 3000 : 4000;
 
-        // Spawn check might append a card (increased threshold to 65px for elegant spacing / reduced thickness)
+        // Spawn check might append a card
         let newCardToAppend: PolaroidCardData | null = null;
-        if (isMouseMovingRef.current && distance > 65) {
-          const randomRotation = Math.floor(Math.random() * 24) - 12; // Balanced rotation -12deg to 12deg
+        if (isMouseMovingRef.current && distance > spawnDistance) {
+          const randomRotation = Math.floor(Math.random() * 24) - 12;
           const randomRotationStart = randomRotation * 1.6;
           const randomRotationEnd = randomRotation * 0.6;
 
@@ -200,8 +245,9 @@ export default function PolaroidTrailHero() {
 
           // Extremely smooth long fading: full opacity initially, then gently fades out
           let opacity = 1.0;
-          if (age > 1200) {
-            opacity = Math.max(0, 1 - (age - 1200) / (lifespan - 1200));
+          const fadeStart = mobile ? 800 : 1200;
+          if (age > fadeStart) {
+            opacity = Math.max(0, 1 - (age - fadeStart) / (lifespan - fadeStart));
           }
 
           return {
@@ -217,10 +263,10 @@ export default function PolaroidTrailHero() {
         // Filter out dead cards dynamically (no timeout leaks)
         const alive = updated
           .filter((card) => (now - card.createdAt < lifespan) && card.opacity > 0.01)
-          .slice(-MAX_TRAIL_CARDS);
+          .slice(-maxCards);
 
         if (newCardToAppend) {
-          const next = [...alive, newCardToAppend].slice(-MAX_TRAIL_CARDS);
+          const next = [...alive, newCardToAppend].slice(-maxCards);
           cardsRef.current = next;
           return next;
         }
@@ -244,6 +290,9 @@ export default function PolaroidTrailHero() {
       className="polaroidHeroContainer"
       ref={containerRef}
       onMouseMove={handleMouseMove}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       id="polaroid-hero-container"
     >
       {/* Film Grain Texture Overlay */}
@@ -254,12 +303,22 @@ export default function PolaroidTrailHero() {
         <div className="pLogo" id="p-logo">
           <img className="pLogoImage" src={LOGO_IMAGE} alt="Creative studio logo" />
         </div>
-        <nav className="pNav" id="p-nav">
-          <a className="pNavLink" href="#works">Works</a>
-          <a className="pNavLink" href="#studio">Studio</a>
-          <a className="pNavLink" href="#services">Services</a>
-          <a className="pNavLink" href="mailto:hello.creativestudio@gmail.com">Contact</a>
+        <nav className={`pNav ${menuOpen ? "pNavOpen" : ""}`} id="p-nav">
+          <a className="pNavLink" href="#works" onClick={() => setMenuOpen(false)}>Works</a>
+          <a className="pNavLink" href="#studio" onClick={() => setMenuOpen(false)}>Studio</a>
+          <a className="pNavLink" href="#services" onClick={() => setMenuOpen(false)}>Services</a>
+          <a className="pNavLink" href="mailto:hello.creativestudio@gmail.com" onClick={() => setMenuOpen(false)}>Contact</a>
         </nav>
+        <button
+          className="pMenuToggle"
+          id="p-menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+        >
+          <span className={`pMenuBar ${menuOpen ? "pMenuBarOpen" : ""}`} />
+          <span className={`pMenuBar ${menuOpen ? "pMenuBarOpen" : ""}`} />
+        </button>
       </header>
 
       {/* 2. Editorial hero typography (stays underneath the image trail) */}
@@ -271,6 +330,11 @@ export default function PolaroidTrailHero() {
         </h1>
         <p className="editorialNote editorialNoteTop">Shopify, AI &amp; digital growth</p>
         <p className="editorialNote editorialNoteBottom">websites that work harder</p>
+      </div>
+
+      {/* Mobile CTA hint */}
+      <div className="mobileTrailHint" id="mobile-trail-hint">
+        <span>Swipe to create</span>
       </div>
 
       {/* 3. Trail canvas where interactive elements are spawned */}

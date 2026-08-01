@@ -1095,37 +1095,85 @@
 .siteFooter a { color: inherit; text-decoration: none; }
 .siteFooter > a:last-child { justify-self: end; }
 
+/* ======================================================================
+   TABLET BREAKPOINT
+   ====================================================================== */
+@media (max-width: 1024px) {
+  .featureIntro {
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+  }
+
+  .logoSectionIntro {
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+  }
+
+  .capabilitiesIntro,
+  .automationCopy {
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+  }
+
+  .contactSection {
+    grid-template-columns: 1fr;
+    gap: 80px;
+  }
+}
+
+/* ======================================================================
+   MOBILE BREAKPOINT
+   ====================================================================== */
 @media (max-width: 768px) {
+  /* ---- Global mobile spacing ---- */
+  .postHero {
+    overflow-x: hidden;
+  }
+
+  /* ---- Feature Section ---- */
+  .featureSection {
+    padding-bottom: clamp(60px, 10vw, 96px);
+  }
+
   .featureMedia {
-    width: 88vw;
+    width: 92vw;
     height: auto;
-    transform: translateY(-44px);
+    transform: translateY(-36px);
   }
 
   .featureButton {
-    width: 92px;
-    height: 92px;
+    width: 80px;
+    height: 80px;
+    font-size: 0.6rem;
   }
 
   .featureIntro {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 24px;
+    width: min(92vw, 1440px);
   }
 
   .featureIntro h2,
   .studioSection h2 {
-    font-size: clamp(3.6rem, 17vw, 6rem);
+    font-size: clamp(2.8rem, 12vw, 5rem);
   }
 
+  .featureCopy {
+    max-width: 100%;
+  }
+
+  /* ---- Projects Section ---- */
   .projectsHeader {
     flex-direction: column;
-    gap: 26px;
-    margin-bottom: 44px;
+    gap: 20px;
+    margin-bottom: 36px;
+    width: min(92vw, 1440px);
   }
 
   .projectGrid {
     grid-template-columns: 1fr;
-    gap: 64px;
+    gap: 48px;
+    width: min(92vw, 1440px);
   }
 
   .projectImageWrap {
@@ -1138,44 +1186,120 @@
     gap: 6px;
   }
 
-  .logoSectionIntro,
-  .capabilitiesIntro,
-  .automationCopy,
-  .processHeader {
+  .projectMeta h3 {
+    font-size: clamp(1.4rem, 6vw, 2.4rem);
+  }
+
+  /* ---- Logo Section ---- */
+  .logoSectionIntro {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 20px;
+    width: min(92vw, 1440px);
   }
 
   .logoSectionIntro h2 {
     grid-column: auto;
+    font-size: clamp(2.6rem, 10vw, 4.5rem);
   }
 
   .logoItem {
-    width: 220px;
-    height: 120px;
-    padding: 0 42px;
+    width: 180px;
+    height: 100px;
+    padding: 0 28px;
+  }
+
+  .logoItem img {
+    height: 52px;
+  }
+
+  /* ---- Capabilities Section ---- */
+  .capabilitiesSection {
+    padding: clamp(70px, 10vw, 130px) 5vw;
+  }
+
+  .capabilitiesIntro {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: clamp(50px, 8vw, 90px);
   }
 
   .capabilitiesIntro h2 {
-    font-size: clamp(4rem, 17vw, 6rem);
+    font-size: clamp(2.8rem, 12vw, 5rem);
+  }
+
+  .capabilitiesIntro > p:last-child {
+    max-width: 100%;
+  }
+
+  .serviceRow {
+    min-height: 90px;
+    grid-template-columns: 32px 1fr auto;
+    gap: 12px;
+    padding: 16px 0;
+  }
+
+  .serviceRow h3 {
+    font-size: clamp(1.4rem, 6vw, 2.4rem);
+  }
+
+  .serviceRow p {
+    display: none;
+  }
+
+  .serviceRow:hover {
+    padding: 16px 12px;
+  }
+
+  /* ---- Automation / Growth Flow ---- */
+  .automationSection {
+    padding: clamp(70px, 10vw, 130px) 5vw;
+  }
+
+  .automationCopy {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: clamp(50px, 7vw, 90px);
   }
 
   .automationCopy h2,
   .processHeader h2 {
-    font-size: clamp(4rem, 16vw, 6rem);
+    font-size: clamp(2.8rem, 11vw, 5rem);
+  }
+
+  .automationCopy > p:last-child {
+    max-width: 100%;
   }
 
   .growthFlow {
     grid-template-columns: 1fr;
+    gap: 8px;
   }
 
   .flowNode {
-    min-height: 190px;
+    min-height: 140px;
+    padding: 20px;
+  }
+
+  .flowNode strong {
+    font-size: clamp(1.4rem, 5vw, 2.2rem);
   }
 
   .flowArrow {
     transform: rotate(90deg);
     justify-self: center;
+    font-size: 0.9rem;
+    padding: 4px 0;
+  }
+
+  /* ---- Process Section ---- */
+  .processSection {
+    padding: clamp(70px, 10vw, 130px) 5vw;
+  }
+
+  .processHeader {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: clamp(50px, 7vw, 90px);
   }
 
   .processGrid {
@@ -1183,37 +1307,61 @@
   }
 
   .processCard {
-    min-height: 260px;
+    min-height: 200px;
+    padding: 22px;
     border-right: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.22);
   }
 
-  .processCard:last-child { border-bottom: 0; }
-
-  .serviceRow {
-    min-height: 118px;
-    grid-template-columns: 36px 1fr auto;
-    gap: 14px;
+  .processCard:last-child {
+    border-bottom: 0;
   }
 
-  .serviceRow p {
-    display: none;
+  .processCard h3 {
+    font-size: clamp(2rem, 8vw, 3.5rem);
   }
 
+  /* ---- Story Section ---- */
   .storySection {
     grid-template-columns: 1fr;
+    min-height: auto;
   }
 
   .storyImage {
-    min-height: 70vh;
+    min-height: 50vh;
+    padding: clamp(30px, 5vw, 60px);
   }
 
   .storyContent {
-    padding: 80px 6vw;
+    padding: 60px 6vw;
+  }
+
+  .storyContent h2 {
+    font-size: clamp(2.8rem, 10vw, 5rem);
+    margin-top: 28px;
+  }
+
+  .storyCopy {
+    max-width: 100%;
+    margin: 32px 0 48px;
   }
 
   .storyStats {
-    gap: 10px;
+    gap: 8px;
+  }
+
+  .storyStats strong {
+    font-size: clamp(1.6rem, 8vw, 3rem);
+  }
+
+  /* ---- Quote Section ---- */
+  .quoteSection {
+    min-height: 50vh;
+    padding: clamp(60px, 8vw, 120px) 5vw;
+  }
+
+  .quoteSection blockquote {
+    font-size: clamp(2.4rem, 9vw, 5rem);
   }
 
   .quoteCredit {
@@ -1221,22 +1369,55 @@
     gap: 8px;
   }
 
-  .siteFooter {
-    grid-template-columns: 1fr;
-    gap: 18px;
+  /* ---- Studio Section ---- */
+  .studioSection {
+    min-height: auto;
+    padding: clamp(60px, 8vw, 120px) 5vw;
+    gap: 48px;
   }
 
-  .siteFooter > a:last-child {
-    justify-self: start;
+  .studioPitch {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
   }
 
+  .promoTicket {
+    align-self: center;
+  }
+
+  .studioSection > a {
+    align-self: flex-start;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* ---- Contact Section ---- */
   .contactSection {
     grid-template-columns: 1fr;
-    gap: 70px;
+    gap: 50px;
+    padding: clamp(60px, 8vw, 120px) 5vw;
+  }
+
+  .contactIntro h2 {
+    font-size: clamp(2.8rem, 10vw, 5rem);
+    margin-top: 32px;
+  }
+
+  .contactDirect {
+    margin-top: 0;
+    padding-top: 40px;
+  }
+
+  .contactDirect a {
+    font-size: 0.82rem;
+    word-break: break-all;
   }
 
   .contactForm {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .contactFieldWide,
@@ -1244,21 +1425,103 @@
     grid-column: auto;
   }
 
-  .contactDirect {
-    margin-top: 0;
-    padding-top: 54px;
+  .glowInputShell input,
+  .glowInputShell select {
+    height: 54px;
+    padding: 0 16px;
+    font-size: 0.82rem;
   }
 
-  .studioPitch {
-    flex-direction: column;
-    align-items: flex-start;
+  .glowInputShell textarea {
+    min-height: 130px;
+    padding: 16px;
   }
 
-  .promoTicket {
-    align-self: center;
+  .contactSubmit {
+    min-height: 56px;
+  }
+
+  /* ---- Site Footer ---- */
+  .siteFooter {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 24px 5vw;
+  }
+
+  .siteFooter > a:last-child {
+    justify-self: start;
+  }
+
+  .siteFooter a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
   }
 }
 
+/* ======================================================================
+   SMALL MOBILE (< 400px)
+   ====================================================================== */
+@media (max-width: 400px) {
+  .featureIntro h2,
+  .studioSection h2 {
+    font-size: clamp(2.2rem, 11vw, 3.8rem);
+  }
+
+  .capabilitiesIntro h2 {
+    font-size: clamp(2.2rem, 11vw, 3.8rem);
+  }
+
+  .automationCopy h2,
+  .processHeader h2 {
+    font-size: clamp(2.2rem, 10vw, 3.8rem);
+  }
+
+  .storyContent h2 {
+    font-size: clamp(2.2rem, 9vw, 3.6rem);
+  }
+
+  .quoteSection blockquote {
+    font-size: clamp(1.8rem, 8vw, 3.2rem);
+  }
+
+  .contactIntro h2 {
+    font-size: clamp(2.2rem, 9vw, 3.6rem);
+  }
+
+  .logoSectionIntro h2 {
+    font-size: clamp(2rem, 9vw, 3.2rem);
+  }
+
+  .featureMedia {
+    width: 96vw;
+  }
+
+  .featureButton {
+    width: 68px;
+    height: 68px;
+    font-size: 0.55rem;
+  }
+
+  .promoTicket {
+    --ticket-width: 180px;
+    --ticket-height: 310px;
+  }
+}
+
+/* ======================================================================
+   ACCESSIBILITY
+   ====================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .logoTrack { animation-play-state: paused; }
+  .logoTrack {
+    animation-play-state: paused;
+  }
+
+  .promoTicket {
+    animation: none;
+  }
+
+  .promoBackground::after {
+    animation: none;
+  }
 }

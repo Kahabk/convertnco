@@ -1,18 +1,23 @@
 /* 
  * PolaroidTrailHero.css
  * Styles for the pure black interactive Polaroid cursor trail hero section.
+ * Optimized for mobile performance and touch interaction.
  */
 
 .polaroidHeroContainer {
   position: relative;
   width: 100%;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile browsers */
   background-color: #000000;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
+  touch-action: none; /* Prevent scroll interference during trail interaction */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* Base64 Noise Overlay for authentic analog photo/film grain texture */
@@ -85,6 +90,46 @@
   color: #ffffff;
 }
 
+/* Mobile hamburger menu toggle */
+.pMenuToggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 30;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.3s ease;
+}
+
+.pMenuToggle:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.pMenuBar {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: #fff;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  border-radius: 1px;
+}
+
+.pMenuBar.pMenuBarOpen:first-child {
+  transform: translateY(3.75px) rotate(45deg);
+}
+
+.pMenuBar.pMenuBarOpen:last-child {
+  transform: translateY(-3.75px) rotate(-45deg);
+}
+
 /* Oversized editorial typography inspired by the supplied layout reference */
 .staticHeroCenter {
   position: absolute;
@@ -154,6 +199,31 @@
   left: 47%;
   top: 70%;
   bottom: auto;
+}
+
+/* Mobile swipe trail hint */
+.mobileTrailHint {
+  display: none;
+  position: absolute;
+  z-index: 6;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.mobileTrailHint span {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+  animation: hintPulse 3s ease-in-out infinite;
+}
+
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.6; }
 }
 
 /* Trail Area */
@@ -316,62 +386,153 @@
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .pHeader {
-    padding: 24px;
-  }
-  
-  .pNav {
-    display: none; /* Clear mobile clutter */
-  }
+/* ======================================================================
+   RESPONSIVE ADJUSTMENTS
+   ====================================================================== */
 
-  .trailImageCard {
-    --card-w: 180px;
-    --card-h: 120px;
+/* Tablet breakpoint */
+@media (max-width: 1024px) {
+  .pHeader {
+    padding: 28px 24px;
   }
 
   .editorialGlobal {
-    top: 24%;
-    left: 6%;
-    font-size: clamp(3.5rem, 18vw, 5.5rem);
+    top: 20%;
+    left: 12%;
+    font-size: clamp(3.8rem, 10vw, 6rem);
   }
 
   .editorialCreative {
-    top: 40%;
-    left: 8%;
-    font-size: clamp(3.5rem, 18vw, 5.5rem);
+    top: 38%;
+    left: 18%;
+    font-size: clamp(4rem, 10.5vw, 6.5rem);
   }
 
   .editorialStudio {
-    right: 6%;
     top: 56%;
-    bottom: auto;
-    font-size: clamp(3.5rem, 18vw, 5.5rem);
+    left: 35%;
+    font-size: clamp(4rem, 10.5vw, 6.5rem);
   }
 
   .editorialNoteTop {
-    top: 35%;
+    top: 32%;
     left: auto;
-    right: 7%;
+    right: 6%;
   }
 
   .editorialNoteBottom {
-    left: 7%;
-    top: 69%;
-    bottom: auto;
+    left: auto;
+    right: 6%;
+    top: 68%;
   }
 
   .pFooter {
-    padding: 24px;
+    padding: 28px 24px;
+  }
+}
+
+/* Mobile breakpoint */
+@media (max-width: 768px) {
+  .polaroidHeroContainer {
+    touch-action: pan-y; /* Allow vertical scroll but track horizontal for trail */
+  }
+
+  .pHeader {
+    padding: 20px 20px;
+  }
+  
+  .pNav {
+    /* Full-screen overlay nav for mobile */
+    position: fixed;
+    inset: 0;
+    z-index: 25;
     flex-direction: column;
-    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+    font-size: 14px;
+    letter-spacing: 0.25em;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .pNav.pNavOpen {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .pNav .pNavLink {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 12px 24px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .pMenuToggle {
+    display: flex;
+  }
+
+  .trailImageCard {
+    --card-w: 160px;
+    --card-h: 110px;
+    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.7));
+  }
+
+  .editorialGlobal {
+    top: 22%;
+    left: 5%;
+    font-size: clamp(3rem, 14vw, 4.5rem);
+  }
+
+  .editorialCreative {
+    top: 38%;
+    left: 5%;
+    font-size: clamp(3.2rem, 15vw, 4.8rem);
+  }
+
+  .editorialStudio {
+    left: 5%;
+    right: auto;
+    top: 54%;
+    bottom: auto;
+    font-size: clamp(3.2rem, 15vw, 4.8rem);
+  }
+
+  .editorialNoteTop {
+    top: 33%;
+    left: auto;
+    right: 5%;
+  }
+
+  .editorialNoteBottom {
+    left: 5%;
+    right: auto;
+    top: 68%;
+    bottom: auto;
+  }
+
+  .mobileTrailHint {
+    display: block;
+  }
+
+  .pFooter {
+    padding: 20px;
+    flex-direction: column;
+    gap: 20px;
     align-items: center;
   }
 
   .pFooterLeft {
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     text-align: center;
   }
 
@@ -381,5 +542,42 @@
 
   .pFooterRight {
     align-items: center;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 400px) {
+  .pHeader {
+    padding: 16px 16px;
+  }
+
+  .editorialGlobal {
+    font-size: clamp(2.6rem, 13vw, 3.8rem);
+  }
+
+  .editorialCreative {
+    font-size: clamp(2.8rem, 14vw, 4rem);
+  }
+
+  .editorialStudio {
+    font-size: clamp(2.8rem, 14vw, 4rem);
+  }
+
+  .trailImageCard {
+    --card-w: 130px;
+    --card-h: 90px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trailImageCard,
+  .trailImageMask,
+  .trailImage {
+    animation: none !important;
+  }
+  
+  .mobileTrailHint span {
+    animation: none;
+    opacity: 0.4;
   }
 }
