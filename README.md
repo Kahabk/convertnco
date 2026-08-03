@@ -1,6 +1,4 @@
-<div align="center">
-  <img width="1200" alt="Creative agency website banner" src="./t.jpg" />
-</div>
+## Convertandco
 
 # Creative Agency Portfolio
 
