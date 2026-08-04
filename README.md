@@ -24,11 +24,7 @@ A responsive, motion-led agency website for Shopify development, AI automation, 
 
 ## Tech stack
 
-- React 19
-- TypeScript
-- Vite 6
-- Tailwind CSS 4
-- CSS animations and responsive layouts
+
 
 ## Run locally
 
