@@ -76,6 +76,9 @@ interface PolaroidCardData {
   opacity: number;
 }
 
+// Detect mobile once at module load — avoids hydration mismatch
+const IS_MOBILE = typeof window !== "undefined" && window.innerWidth < 768;
+
 export default function PolaroidTrailHero() {
   const [cards, setCards] = useState<PolaroidCardData[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -83,7 +86,7 @@ export default function PolaroidTrailHero() {
   const zIndexCounterRef = useRef<number>(1);
   const imageIndexCounterRef = useRef<number>(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const isMobileRef = useRef(typeof window !== "undefined" && window.innerWidth < 768);
+  const isMobileRef = useRef(IS_MOBILE);
 
   // References for ultra-smooth rendering calculations
   const mousePosRef = useRef({ x: 0, y: 0 });
@@ -149,6 +152,9 @@ export default function PolaroidTrailHero() {
   };
 
   useEffect(() => {
+    // ── MOBILE GUARD: skip entire animation on phones ──
+    if (IS_MOBILE) return;
+
     let animationFrameId: number;
 
     // Initialize starting coordinates at the center of the viewport
@@ -289,10 +295,10 @@ export default function PolaroidTrailHero() {
     <div 
       className="polaroidHeroContainer"
       ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      onMouseMove={IS_MOBILE ? undefined : handleMouseMove}
+      onTouchStart={IS_MOBILE ? undefined : handleTouchStart}
+      onTouchMove={IS_MOBILE ? undefined : handleTouchMove}
+      onTouchEnd={IS_MOBILE ? undefined : handleTouchEnd}
       id="polaroid-hero-container"
     >
       {/* Film Grain Texture Overlay */}
@@ -337,39 +343,39 @@ export default function PolaroidTrailHero() {
         <span>Swipe to create</span>
       </div>
 
-      {/* 3. Trail canvas where interactive elements are spawned */}
-      <div className="trailCanvas" id="trail-canvas">
-        {cards.map((card) => (
-          <div
-            key={card.id}
-            id={card.id}
-            className="trailImageCard"
-            style={{
-              zIndex: card.zIndex,
-              opacity: card.opacity,
-              // Inject custom CSS variables to calculate high performance hardware-accelerated transforms
-              ["--x" as any]: `${card.x}px`,
-              ["--y" as any]: `${card.y}px`,
-              ["--rot" as any]: `${card.rotation}deg`,
-              ["--rot-start" as any]: `${card.rotationStart}deg`,
-              ["--rot-end" as any]: `${card.rotationEnd}deg`,
-              ["--opacity" as any]: card.opacity,
-            }}
-          >
-            {/* Sharp lens mask clipping the image spotlight */}
-            <div className="trailImageMask" id={`mask-${card.id}`}>
-              <img 
-                src={card.imageUrl} 
-                alt={card.label} 
-                className="trailImage"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-                decoding="async"
-              />
+      {/* 3. Trail canvas — desktop only, skipped entirely on mobile */}
+      {!IS_MOBILE && (
+        <div className="trailCanvas" id="trail-canvas">
+          {cards.map((card) => (
+            <div
+              key={card.id}
+              id={card.id}
+              className="trailImageCard"
+              style={{
+                zIndex: card.zIndex,
+                opacity: card.opacity,
+                ["--x" as any]: `${card.x}px`,
+                ["--y" as any]: `${card.y}px`,
+                ["--rot" as any]: `${card.rotation}deg`,
+                ["--rot-start" as any]: `${card.rotationStart}deg`,
+                ["--rot-end" as any]: `${card.rotationEnd}deg`,
+                ["--opacity" as any]: card.opacity,
+              }}
+            >
+              <div className="trailImageMask" id={`mask-${card.id}`}>
+                <img 
+                  src={card.imageUrl} 
+                  alt={card.label} 
+                  className="trailImage"
+                  referrerPolicy="no-referrer"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* 4. Footer */}
       <footer className="pFooter" id="p-footer">
