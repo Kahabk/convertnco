@@ -2,6 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Preconnect to external origins to reduce DNS/TCP latency -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preload the main above-the-fold image -->
+    <link rel="preload" as="image" href="/new.jpg" fetchpriority="high" />
     <meta name="google-site-verification" content="google52dc24a102aabd3a" />
     <link rel="icon" type="image/png" href="/favicon.png?v=2" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
