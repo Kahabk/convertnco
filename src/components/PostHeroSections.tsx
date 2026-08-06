@@ -98,7 +98,7 @@ export default function PostHeroSections() {
           />
           <a className="featureButton" href="#selected-work" aria-label="View selected work">
             <span>View</span>
-            <span className="featureArrow">↘</span>
+            <span className="featureArrow">{"\u2198\uFE0E"}</span>
           </a>
         </div>
 
@@ -168,7 +168,7 @@ export default function PostHeroSections() {
               <span>{number}</span>
               <h3>{title}</h3>
               <p>{description}</p>
-              <span className="serviceArrow">↗</span>
+              <span className="serviceArrow">{"\u2197\uFE0E"}</span>
             </article>
           ))}
         </div>
@@ -184,11 +184,11 @@ export default function PostHeroSections() {
         </div>
         <div className="growthFlow" aria-label="Our connected growth system">
           <div className="flowNode"><span>01</span><strong>Shopify store</strong><small>High-converting foundation</small></div>
-          <span className="flowArrow">→</span>
+          <span className="flowArrow">{"\u2192\uFE0E"}</span>
           <div className="flowNode"><span>02</span><strong>AI automation</strong><small>Smarter operations</small></div>
-          <span className="flowArrow">→</span>
+          <span className="flowArrow">{"\u2192\uFE0E"}</span>
           <div className="flowNode"><span>03</span><strong>Digital marketing</strong><small>Qualified demand</small></div>
-          <span className="flowArrow">→</span>
+          <span className="flowArrow">{"\u2192\uFE0E"}</span>
           <div className="flowNode flowNodeDark"><span>04</span><strong>Scalable growth</strong><small>Measure. Learn. Improve.</small></div>
         </div>
       </section>
@@ -242,7 +242,7 @@ export default function PostHeroSections() {
           <h2>Ready to build a brand<br />that sells while you sleep?</h2>
           <PromoTicket />
         </div>
-        <a href={`mailto:${CONTACT_EMAIL}`}>Tell us about your project <span>↗</span></a>
+        <a href={`mailto:${CONTACT_EMAIL}`}>Tell us about your project <span>{"\u2197\uFE0E"}</span></a>
       </section>
 
       <section className="contactSection" id="contact">
@@ -298,14 +298,14 @@ export default function PostHeroSections() {
               <textarea name="project" placeholder="Goals, challenges and timeline..." required />
             </span>
           </label>
-          <button className="contactSubmit" type="submit"><span>Send enquiry</span><span>↗</span></button>
+          <button className="contactSubmit" type="submit"><span>Send enquiry</span><span>{"\u2197\uFE0E"}</span></button>
         </form>
       </section>
 
       <footer className="siteFooter">
         <p>© 2026 Creative Studio</p>
         <div><a href="#works">Work</a><a href="#services">Services</a><a href="#contact">Contact</a></div>
-        <a href="#polaroid-hero-container">Back to top ↑</a>
+        <a href="#polaroid-hero-container">{"Back to top \u2191\uFE0E"}</a>
       </footer>
     </main>
   );
