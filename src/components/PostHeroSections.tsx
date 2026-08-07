@@ -17,7 +17,7 @@ const PROJECTS = [
     category: "Shopify design · Development · CRO",
   },
   {
-    image: assetUrl("web_aset/Screenshot from 2026-07-05 17-08-01.png"),
+    image: assetUrl("web_aset/work_2.png"),
     title: "Dark Sneaker Product Page",
     category: "Ecommerce · Product advertising · Art direction",
   },
@@ -25,6 +25,11 @@ const PROJECTS = [
     image: assetUrl("web_aset/bf3296fd6e1fa88ffb50a9567150fb56.jpg"),
     title: "Lucir Fashion Store",
     category: "Ecommerce · Art direction · Campaign",
+  },
+  {
+    image: assetUrl("web_aset/mocup.png"),
+    title: "Shopify Gift & Rewards App",
+    category: "Shopify App · UX/UI · Mobile Experience",
   },
 ];
 
