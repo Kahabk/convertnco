@@ -2,7 +2,11 @@ import { MouseEvent, TouchEvent, useRef, useState, useEffect } from "react";
 import "./PolaroidTrailHero.css";
 
 const BASE_URL = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
-const assetUrl = (path: string) => `${BASE_URL}${path}`;
+const assetUrl = (path: string) => {
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  const base = BASE_URL && BASE_URL.endsWith("/") ? BASE_URL.slice(0, -1) : (BASE_URL || "");
+  return `${base}${cleanPath}`;
+};
 
 const LOGO_IMAGE = assetUrl("wight_logo.png");
 const MAX_TRAIL_CARDS = 16;

@@ -6,7 +6,11 @@ import PromoTicket from "./PromoTicket";
 const CONTACT_EMAIL = "hello.creativestudio@gmail.com";
 const BASE_URL = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
 
-const assetUrl = (path: string) => `${BASE_URL}${path}`;
+const assetUrl = (path: string) => {
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  const base = BASE_URL && BASE_URL.endsWith("/") ? BASE_URL.slice(0, -1) : (BASE_URL || "");
+  return `${base}${cleanPath}`;
+};
 
 const FEATURE_IMAGE = assetUrl("new.jpg");
 
