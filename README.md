@@ -29,7 +29,7 @@ A responsive, motion-led agency website for Shopify development, AI automation, 
 - Tailwind CSS 4
 - CSS animations and responsive layouts
 
-
+## add full mangment admin pnal will add soon 
 ## Run locally
 
 Prerequisite: Node.js 18 or newer.
