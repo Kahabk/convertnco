@@ -30,6 +30,10 @@ A responsive, motion-led agency website for Shopify development, AI automation, 
 - CSS animations and responsive layouts
 
 ## add full mangment admin pnal will add soon 
+- futur agntic plaatform all so add 
+- futi workfullow will add
+- new adding
+  
 ## Run locally
 
 Prerequisite: Node.js 18 or newer.
