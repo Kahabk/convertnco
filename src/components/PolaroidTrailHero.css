@@ -140,6 +140,7 @@
   overflow: hidden;
 }
 
+
 .editorialTitle {
   position: absolute;
   inset: 0;
@@ -579,5 +580,263 @@
   .mobileTrailHint span {
     animation: none;
     opacity: 0.4;
+  }
+}
+.newHeroContent {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 130px 24px 100px;
+  box-sizing: border-box;
+  text-align: center;
+  pointer-events: none;
+}
+
+.newHeroEyebrow {
+  margin: 0 0 35px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.newHeroTitle {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(58px, 8vw, 128px);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  color: #f5f3ef;
+}
+
+.newHeroDescription {
+  margin: 34px 0 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.newHeroCta {
+  margin-top: 40px;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.newHeroButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.newHeroPrimary,
+.newHeroSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 28px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.newHeroPrimary {
+  background: #f5f3ef;
+  color: #090909;
+}
+
+.newHeroPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 243, 239, 0.25);
+}
+
+.newHeroSecondary {
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: #f5f3ef;
+  background: transparent;
+}
+
+.newHeroSecondary:hover {
+  border-color: rgba(255, 255, 255, 1);
+  transform: translateY(-2px);
+}
+
+.newHeroGuarantee {
+  margin: 18px 0 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+.newHeroGuarantee a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.newHeroGuarantee a:hover {
+  color: #fff;
+}
+
+/* New hero: tablet layout */
+@media (max-width: 1024px) {
+  .newHeroTitle {
+    font-size: clamp(3.5rem, 8vw, 5rem);
+  }
+
+  .newHeroButtons {
+    gap: 10px;
+  }
+
+  .newHeroPrimary,
+  .newHeroSecondary {
+    padding: 14px 22px;
+    font-size: 14px;
+  }
+}
+
+/* New hero: phone layout */
+@media (max-width: 768px) {
+  .pHeader {
+    padding: 78px 28px 20px;
+  }
+
+  .pNav {
+    display: none;
+  }
+
+  .newHeroContent {
+    justify-content: flex-start;
+    padding: 160px 20px 40px;
+  }
+
+  .newHeroEyebrow {
+    max-width: 420px;
+    margin-bottom: 27px;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    line-height: 1.45;
+  }
+
+  .newHeroTitle {
+    width: 100%;
+    max-width: 450px;
+    font-size: clamp(2.8rem, 11vw, 3.75rem);
+    line-height: 0.92;
+  }
+
+  .newHeroDescription {
+    max-width: 370px;
+    margin-top: 27px;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .newHeroCta {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 36px;
+  }
+
+  .newHeroButtons {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .newHeroPrimary,
+  .newHeroSecondary {
+    flex: 1 1 auto;
+    min-width: 140px;
+    min-height: 52px;
+    padding: 0 18px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .newHeroGuarantee {
+    margin: 15px 0 0;
+    font-size: 12px;
+  }
+
+  .pFooter {
+    position: absolute;
+    right: 0;
+    bottom: 8px;
+    left: 0;
+    z-index: 10;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .pFooterLeft {
+    display: none;
+  }
+
+  .pFooterRight {
+    align-items: center;
+  }
+
+  .pScrollLabel {
+    margin-bottom: 8px;
+  }
+
+  .pScrollIndicator {
+    height: 30px;
+  }
+}
+
+/* New hero: small phone layout */
+@media (max-width: 400px) {
+  .newHeroContent {
+    padding: 140px 16px 40px;
+  }
+
+  .newHeroTitle {
+    font-size: clamp(2.4rem, 11vw, 3rem);
+  }
+
+  .newHeroDescription {
+    font-size: 15px;
+    margin-top: 22px;
+  }
+
+  .newHeroCta {
+    margin-top: 28px;
+  }
+
+  .newHeroButtons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .newHeroPrimary,
+  .newHeroSecondary {
+    flex: none;
+    width: 100%;
+    min-height: 50px;
+    padding: 14px 20px;
+    font-size: 14px;
+  }
+
+  .newHeroGuarantee {
+    font-size: 11px;
   }
 }

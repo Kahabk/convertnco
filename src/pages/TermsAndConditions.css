@@ -1,0 +1,248 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap");
+.terms-page {
+  background: #ffffff;
+  color: #202020;
+  min-height: 100vh;
+  padding: 80px 24px;
+  font-family: inherit;
+}
+
+.terms-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.terms-header {
+  max-width: 760px;
+  margin-bottom: 65px;
+}
+
+.terms-eyebrow {
+  color: #777;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.terms-header h1 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(38px, 6vw, 64px);
+  letter-spacing: -2.5px;
+  margin: 20px 0;
+  line-height: 1.1;
+}
+
+.terms-header > p {
+  color: #737373;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.terms-meta {
+  display: flex;
+  gap: 12px;
+  color: #888;
+  font-size: 13px;
+  margin-top: 25px;
+}
+
+.terms-layout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 75px;
+  align-items: start;
+}
+
+.terms-sidebar {
+  position: sticky;
+  top: 35px;
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+.terms-sidebar h3 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: #999;
+  margin-bottom: 22px;
+}
+
+.terms-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.terms-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 10px 8px;
+  border-radius: 6px;
+  color: #777;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.terms-nav-link span {
+  color: #aaa;
+  font-size: 10px;
+}
+
+.terms-nav-link:hover,
+.terms-nav-link.active {
+  background: #f3f6f2;
+  color: #202020;
+}
+
+.terms-nav-link.active span {
+  color: #1a1b1a;
+}
+
+.terms-content {
+  min-width: 0;
+}
+
+.terms-notice {
+  padding: 22px 25px;
+  background: #f6f7f5;
+  border-left: 3px solid #1b1b1b;
+  border-radius: 4px;
+  margin-bottom: 50px;
+}
+
+.terms-notice strong {
+  font-size: 14px;
+}
+
+.terms-notice p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+.terms-content section {
+  scroll-margin-top: 35px;
+  padding-bottom: 35px;
+  margin-bottom: 35px;
+  border-bottom: 1px solid #ededed;
+}
+
+.terms-content h2 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+  font-weight: 650;
+}
+
+.terms-content h3 {
+  font-size: 15px;
+  margin-top: 25px;
+  margin-bottom: 12px;
+}
+
+.terms-content p,
+.terms-content li {
+  color: #626262;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.terms-content ul,
+.terms-content ol {
+  padding-left: 22px;
+}
+
+.terms-content li {
+  padding-left: 5px;
+  margin-bottom: 10px;
+}
+
+.terms-content strong {
+  color: #292929;
+}
+
+.terms-content a {
+  color: #161616;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.terms-contact {
+  background: #f7f8f6;
+  padding: 20px 25px;
+  border-radius: 6px;
+  margin-top: 20px;
+}
+
+.terms-contact p {
+  margin: 8px 0;
+}
+
+.terms-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.terms-footer p,
+.terms-footer a {
+  font-size: 12px;
+  color: #888;
+}
+
+@media (max-width: 850px) {
+  .terms-layout {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .terms-sidebar {
+    position: relative;
+    top: 0;
+    max-height: 230px;
+    overflow-y: auto;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+  }
+
+  .terms-sidebar nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 550px) {
+  .terms-page {
+    padding: 50px 18px;
+  }
+
+  .terms-header {
+    margin-bottom: 40px;
+  }
+
+  .terms-sidebar nav {
+    grid-template-columns: 1fr;
+  }
+
+  .terms-content h2 {
+    font-size: 19px;
+  }
+
+  .terms-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
