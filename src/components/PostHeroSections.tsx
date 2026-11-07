@@ -2,9 +2,6 @@ import "./PostHeroSections.css";
 import { FormEvent } from "react";
 import FigmaServiceCard from "./FigmaServiceCard";
 import PromoTicket from "./PromoTicket";
-import TermsAndConditions from "../pages/TermsAndCondition";
-import { Route } from "lucide-react";
-import path from "path";
 import { Link } from "react-router-dom";
 const CONTACT_EMAIL = "hello.creativestudio@gmail.com";
 const BASE_URL = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
@@ -71,7 +68,6 @@ const PROCESS = [
   ["04", "Scale", "We launch campaigns, learn from data and improve continuously."],
 ];
 
-<Route path = "/terms-and-conditions" element={<TermsAndConditions />} />
 export default function PostHeroSections() {
   const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

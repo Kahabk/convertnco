@@ -1,9 +1,7 @@
-import { MouseEvent, useRef, useState, useEffect } from "react";
+import { MouseEvent, useRef, useState, useEffect, memo, useCallback } from "react";
 import "./PolaroidTrailHero.css";
 
 const LOGO_IMAGE = new URL("../../wight_logo.png", import.meta.url).href;
-
-
 
 // Local campaign artwork used by the cursor-trail animation.
 const SAMPLE_IMAGES = [
@@ -52,6 +50,31 @@ const STAGE_LABELS = [
   "LIGHT NOTICE WIDE",
 ];
 
+// ── Image preloader ──────────────────────────────────────────────────
+// Decode every trail image into browser memory ONCE at startup so that
+// spawning a new card never triggers a network request (no more 304s).
+const preloadedImages = new Map<string, HTMLImageElement>();
+
+function preloadAllImages() {
+  for (const src of SAMPLE_IMAGES) {
+    if (preloadedImages.has(src)) continue;
+    const img = new Image();
+    img.decoding = "async";
+    img.src = src;
+    preloadedImages.set(src, img);
+  }
+  // Also preload the logo
+  if (!preloadedImages.has(LOGO_IMAGE)) {
+    const logo = new Image();
+    logo.src = LOGO_IMAGE;
+    preloadedImages.set(LOGO_IMAGE, logo);
+  }
+}
+
+// Kick off preloading immediately at module load (before React mounts)
+preloadAllImages();
+
+// ── Types ────────────────────────────────────────────────────────────
 interface PolaroidCardData {
   id: string;
   x: number;
@@ -61,7 +84,7 @@ interface PolaroidCardData {
   rotation: number;
   rotationStart: number;
   rotationEnd: number;
-  imageUrl: string;
+  imageIndex: number; // Store index instead of URL string to avoid re-creating strings
   label: string;
   dateStr: string;
   zIndex: number;
@@ -69,8 +92,40 @@ interface PolaroidCardData {
   opacity: number;
 }
 
-const MAX_TRAIL_CARDS = 10;
+const MAX_TRAIL_CARDS = 8; // Reduced from 10 — fewer simultaneous DOM nodes
 
+// ── Memoized card component ─────────────────────────────────────────
+// Each card is memoized so React only re-renders the cards whose props
+// actually changed, instead of re-rendering all 8 cards every frame.
+const TrailCard = memo(function TrailCard({ card }: { card: PolaroidCardData }) {
+  const src = SAMPLE_IMAGES[card.imageIndex];
+  return (
+    <div
+      className="trailImageCard"
+      style={{
+        zIndex: card.zIndex,
+        opacity: card.opacity,
+        ["--x" as any]: `${card.x}px`,
+        ["--y" as any]: `${card.y}px`,
+        ["--rot" as any]: `${card.rotation}deg`,
+        ["--rot-start" as any]: `${card.rotationStart}deg`,
+        ["--rot-end" as any]: `${card.rotationEnd}deg`,
+        ["--opacity" as any]: card.opacity,
+      }}
+    >
+      <div className="trailImageMask">
+        <img
+          src={src}
+          alt={card.label}
+          className="trailImage"
+          decoding="async"
+        />
+      </div>
+    </div>
+  );
+});
+
+// ── Main component ──────────────────────────────────────────────────
 export default function PolaroidTrailHero() {
   const [cards, setCards] = useState<PolaroidCardData[]>([]);
   const cardsRef = useRef<PolaroidCardData[]>([]);
@@ -78,23 +133,34 @@ export default function PolaroidTrailHero() {
   const imageIndexCounterRef = useRef<number>(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // References for ultra-smooth rendering calculations
+  // Refs for smooth rendering — no state, no re-renders
   const mousePosRef = useRef({ x: 0, y: 0 });
   const lerpedPosRef = useRef({ x: 0, y: 0 });
   const lastSpawnPosRef = useRef({ x: 0, y: 0 });
   const isMouseMovingRef = useRef(false);
   const idleTimeoutRef = useRef<any>(null);
+  const lastRenderRef = useRef(0);
 
-  // Smooth mouse move handler - captures raw mouse coordinates
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    
+  // Cache the bounding rect instead of calling getBoundingClientRect every mouse move
+  const cachedRectRef = useRef<DOMRect | null>(null);
+  const rectCacheTimeRef = useRef(0);
+
+  const handleMouseMove = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    const now = Date.now();
+
+    // Refresh the cached rect at most once every 500ms (or on first move)
+    if (!cachedRectRef.current || now - rectCacheTimeRef.current > 500) {
+      if (!containerRef.current) return;
+      cachedRectRef.current = containerRef.current.getBoundingClientRect();
+      rectCacheTimeRef.current = now;
+    }
+
+    const rect = cachedRectRef.current;
     mousePosRef.current = {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
     };
-    
+
     isMouseMovingRef.current = true;
 
     // Clear and reset the idle timer
@@ -102,7 +168,7 @@ export default function PolaroidTrailHero() {
     idleTimeoutRef.current = setTimeout(() => {
       isMouseMovingRef.current = false;
     }, 250);
-  };
+  }, []);
 
   useEffect(() => {
     let animationFrameId: number;
@@ -118,7 +184,6 @@ export default function PolaroidTrailHero() {
     }
 
     const tick = () => {
-      // A slightly faster interpolation keeps the trail responsive without looking sharp.
       const prevX = lerpedPosRef.current.x;
       const prevY = lerpedPosRef.current.y;
 
@@ -128,52 +193,57 @@ export default function PolaroidTrailHero() {
       const mvx = lerpedPosRef.current.x - prevX;
       const mvy = lerpedPosRef.current.y - prevY;
 
-      // 2. Spawning calculation: compute distance traveled by the smooth lerped coordinate
       const dx = lerpedPosRef.current.x - lastSpawnPosRef.current.x;
       const dy = lerpedPosRef.current.y - lastSpawnPosRef.current.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      // Do not force React to render 60 times a second when the cursor is idle.
+      // Skip React render entirely when idle and no cards visible
       if (!isMouseMovingRef.current && cardsRef.current.length === 0) {
         animationFrameId = requestAnimationFrame(tick);
         return;
       }
 
-      // Update positions, velocity, gravity, and opacity of the visible cards.
-      setCards((prev) => {
-        const now = Date.now();
-        const lifespan = 4000; // Match 4s animation
+      // ── Throttle React renders to ~30fps ──────────────────────────
+      // The animation loop runs at 60fps for smooth lerping, but we
+      // only push state to React at 30fps. This halves the number of
+      // virtual DOM diffs and reconciliations.
+      const now = Date.now();
+      if (now - lastRenderRef.current < 33) {
+        animationFrameId = requestAnimationFrame(tick);
+        return;
+      }
+      lastRenderRef.current = now;
 
-        // Spawn check might append a card (increased threshold to 65px for elegant spacing / reduced thickness)
+      setCards((prev) => {
+        const lifespan = 3500; // Slightly shorter lifespan = fewer concurrent cards
+
+        // Spawn check
         let newCardToAppend: PolaroidCardData | null = null;
-        if (isMouseMovingRef.current && distance > 65) {
-          const randomRotation = Math.floor(Math.random() * 24) - 12; // Balanced rotation -12deg to 12deg
+        if (isMouseMovingRef.current && distance > 80) { // Increased threshold from 65 → 80 = fewer spawns
+          const randomRotation = Math.floor(Math.random() * 24) - 12;
           const randomRotationStart = randomRotation * 1.6;
           const randomRotationEnd = randomRotation * 0.6;
 
-          // Cycle through the complete asset collection so every image is shown.
           const themedImageIndex = imageIndexCounterRef.current % SAMPLE_IMAGES.length;
           imageIndexCounterRef.current += 1;
 
-          const selectedImage = SAMPLE_IMAGES[themedImageIndex];
           const randomLabel = STAGE_LABELS[themedImageIndex];
 
           const timeStr = new Date().toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit" });
           const dateStr = `#${String(Math.floor(Math.random() * 900) + 100)} // ${timeStr}`;
 
           const newZIndex = zIndexCounterRef.current++;
-          const cardId = `p-card-${now}-${Math.random().toString(36).substr(2, 9)}`;
 
           newCardToAppend = {
-            id: cardId,
+            id: `p-${now}-${(Math.random() * 1e6) | 0}`, // Faster ID gen than toString(36)
             x: lerpedPosRef.current.x,
             y: lerpedPosRef.current.y,
             vx: mvx * 0.45,
-            vy: mvy * 0.45 - 0.5, // subtle initial loft
+            vy: mvy * 0.45 - 0.5,
             rotation: randomRotation,
             rotationStart: randomRotationStart,
             rotationEnd: randomRotationEnd,
-            imageUrl: selectedImage,
+            imageIndex: themedImageIndex,
             label: randomLabel,
             dateStr,
             zIndex: newZIndex,
@@ -187,18 +257,16 @@ export default function PolaroidTrailHero() {
         const updated = prev.map((card) => {
           const age = now - card.createdAt;
 
-          // Downward gravity acceleration - pulls cards down smoothly when they slow/stop
           const gravity = 0.14;
           const updatedVy = card.vy + gravity;
-          const updatedVx = card.vx * 0.96; // Air resistance friction
-          
+          const updatedVx = card.vx * 0.96;
+
           const updatedX = card.x + updatedVx;
           const updatedY = card.y + updatedVy;
 
-          // Extremely smooth long fading: full opacity initially, then gently fades out
           let opacity = 1.0;
-          if (age > 1200) {
-            opacity = Math.max(0, 1 - (age - 1200) / (lifespan - 1200));
+          if (age > 1000) {
+            opacity = Math.max(0, 1 - (age - 1000) / (lifespan - 1000));
           }
 
           return {
@@ -211,7 +279,7 @@ export default function PolaroidTrailHero() {
           };
         });
 
-        // Filter out dead cards dynamically (no timeout leaks)
+        // Filter out dead cards
         const alive = updated
           .filter((card) => (now - card.createdAt < lifespan) && card.opacity > 0.01)
           .slice(-MAX_TRAIL_CARDS);
@@ -229,7 +297,7 @@ export default function PolaroidTrailHero() {
     };
 
     animationFrameId = requestAnimationFrame(tick);
-    
+
     return () => {
       cancelAnimationFrame(animationFrameId);
       if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
@@ -237,7 +305,7 @@ export default function PolaroidTrailHero() {
   }, []);
 
   return (
-    <div 
+    <div
       className="polaroidHeroContainer"
       ref={containerRef}
       onMouseMove={handleMouseMove}
@@ -246,7 +314,7 @@ export default function PolaroidTrailHero() {
       {/* Film Grain Texture Overlay */}
       <div className="polaroidNoise" />
 
-      {/* 1. Header (Consistent with Immersive UI guidelines) */}
+      {/* 1. Header */}
       <header className="pHeader" id="p-header">
         <div className="pLogo" id="p-logo">
           <img className="pLogoImage" src={LOGO_IMAGE} alt="Creative studio logo" />
@@ -259,7 +327,7 @@ export default function PolaroidTrailHero() {
         </nav>
       </header>
 
-      {/* 2. Editorial hero typography (stays underneath the image trail) */}
+      {/* 2. Editorial hero typography */}
       <div className="newHeroContent">
         <p className="newHeroEyebrow">
           GLOBAL CREATIVE STUDIO · SHOPIFY DESIGN, DEVELOPMENT & CRO
@@ -292,36 +360,10 @@ export default function PolaroidTrailHero() {
         </div>
       </div>
 
-      {/* 3. Trail canvas where interactive elements are spawned */}
+      {/* 3. Trail canvas */}
       <div className="trailCanvas" id="trail-canvas">
         {cards.map((card) => (
-          <div
-            key={card.id}
-            id={card.id}
-            className="trailImageCard"
-            style={{
-              zIndex: card.zIndex,
-              opacity: card.opacity,
-              // Inject custom CSS variables to calculate high performance hardware-accelerated transforms
-              ["--x" as any]: `${card.x}px`,
-              ["--y" as any]: `${card.y}px`,
-              ["--rot" as any]: `${card.rotation}deg`,
-              ["--rot-start" as any]: `${card.rotationStart}deg`,
-              ["--rot-end" as any]: `${card.rotationEnd}deg`,
-              ["--opacity" as any]: card.opacity,
-            }}
-          >
-            {/* Sharp lens mask clipping the image spotlight */}
-            <div className="trailImageMask" id={`mask-${card.id}`}>
-              <img 
-                src={card.imageUrl} 
-                alt={card.label} 
-                className="trailImage"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-              />
-            </div>
-          </div>
+          <TrailCard key={card.id} card={card} />
         ))}
       </div>
 
