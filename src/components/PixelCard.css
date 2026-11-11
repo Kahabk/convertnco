@@ -1,0 +1,4 @@
+.pixel-card { --pixel-card-radius: 24px; position: relative; overflow: hidden; isolation: isolate; border-radius: var(--pixel-card-radius); background: linear-gradient(180deg, #17151c, #0f0e13); box-shadow: 0 24px 48px -24px rgba(0,0,0,.85), inset 0 0 0 1px rgba(255,255,255,.08); }
+.pixel-card[data-theme='light'] { background: linear-gradient(180deg, #fff, #f6f6f8); box-shadow: 0 24px 48px -26px rgba(24,24,27,.22), inset 0 0 0 1px rgba(24,24,27,.08); }
+.pixel-card-canvas { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; }
+.pixel-card > :not(.pixel-card-canvas) { position: relative; z-index: 1; }

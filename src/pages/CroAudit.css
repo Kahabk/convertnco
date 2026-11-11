@@ -1,0 +1,675 @@
+.croContainer {
+  position: relative;
+  min-height: 100vh;
+  background: #050505;
+  color: #f5f3ef;
+  padding: 40px 20px 80px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  transition: background-color 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.croContainer.isTransitioning {
+  pointer-events: none;
+}
+
+.croIntroCanvasWrap {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cro {
+  position: relative;
+  z-index: 1;
+  max-width: 1120px;
+  margin: 0 auto;
+  font-family: inherit;
+  color: #f5f3ef;
+}
+
+/* Heading & Subtitle Styles */
+.cro h1,
+.croHeroTitle {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  margin: 0 0 8px;
+  color: #f5f3ef;
+  letter-spacing: -0.02em;
+  transition:
+    color 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    font-size 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    line-height 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    letter-spacing 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    text-shadow 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    margin 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.croHeroSubtitle,
+.croHero .muted {
+  max-width: 640px;
+  margin: 14px 0 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+  transition:
+    color 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    font-size 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    line-height 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    text-shadow 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    margin 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.croHero {
+  max-width: 720px;
+  margin: 0 0 36px;
+  transition: max-width 700ms cubic-bezier(0.22, 1, 0.36, 1), margin 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.croWorkspace {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 44px;
+  transition: grid-template-columns 700ms cubic-bezier(0.22, 1, 0.36, 1), gap 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.croChat {
+  min-width: 0;
+  transition: max-width 700ms cubic-bezier(0.22, 1, 0.36, 1), margin 700ms cubic-bezier(0.22, 1, 0.36, 1), padding 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.croHistory {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.croPromptWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 24px 0 34px;
+  transition: margin 700ms cubic-bezier(0.22, 1, 0.36, 1), max-width 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.croInputHint {
+  margin: 10px 4px 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+  transition: color 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ========================================================
+   INTRO STATE RESTYLING
+   ======================================================== */
+.croContainer.isIntro {
+  padding-top: 0;
+  background: transparent;
+}
+
+.croContainer.isIntro .croTopBar {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-14px);
+}
+
+.croContainer.isIntro .croWorkspace {
+  grid-template-columns: 0px 1fr;
+  gap: 0;
+}
+
+.croContainer.isIntro .croHistory {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-20px);
+  overflow: hidden;
+  width: 0;
+}
+
+.croContainer.isIntro .croChat {
+  max-width: 700px;
+  margin: 0 auto;
+  padding-top: clamp(16vh, 20vh, 26vh);
+}
+
+.croContainer.isIntro .croHero {
+  max-width: 700px;
+  margin: 0 0 28px;
+}
+
+.croContainer.isIntro .croHeroTitle {
+  font-size: clamp(56px, 8vw, 104px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: #f5f3ef;
+  text-shadow: 0 0 32px rgba(255, 255, 255, 0.45), 0 0 64px rgba(255, 255, 255, 0.2);
+  margin: 0 0 16px;
+}
+
+.croContainer.isIntro .croHeroSubtitle {
+  font-size: clamp(18px, 2vw, 20px);
+  line-height: 1.5;
+  max-width: 640px;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.35);
+  margin: 0 0 32px;
+}
+
+.croContainer.isIntro .croPromptWrap {
+  margin: 0;
+  max-width: 700px;
+  width: 100%;
+}
+
+.croContainer.isIntro .croPromptWrap .audit-prompt-bar {
+  width: 100%;
+}
+
+.croContainer.isIntro .croInputHint {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 600px) {
+  .croContainer.isIntro .croChat {
+    padding-top: 12vh;
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .croHeroTitle,
+  .croHeroSubtitle,
+  .croTopBar,
+  .croHistory,
+  .croContainer,
+  .croWorkspace,
+  .croChat,
+  .croInputHint,
+  .croPromptWrap {
+    transition-duration: 150ms !important;
+    transition-timing-function: linear !important;
+  }
+}
+
+.croNewAudit,
+.croHistoryItem {
+  border: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.croNewAudit {
+  padding: 9px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: #171717;
+  color: #f4f4f5;
+  font-size: 13px;
+  transition: background 150ms ease;
+}
+
+.croNewAudit:hover:not(:disabled) { background: #242424; }
+.croNewAudit:disabled, .croHistoryItem:disabled { cursor: default; opacity: 0.5; }
+
+.croHistoryLabel {
+  margin: 14px 8px 0;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.croHistoryList { display: flex; flex-direction: column; gap: 3px; }
+
+.croHistoryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 7px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.croHistoryItem:hover:not(:disabled) { background: rgba(255, 255, 255, 0.07); color: #fff; }
+.croHistoryItem > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.croHistoryItem small { color: rgba(255, 255, 255, 0.34); font-size: 11px; }
+.croHistoryEmpty { margin: 0 8px; color: rgba(255, 255, 255, 0.34); font-size: 12px; line-height: 1.5; }
+
+.croHero .muted {
+  max-width: 640px;
+  margin: 14px 0 0;
+  font-size: 16px;
+}
+
+.cro .muted {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Top bar */
+.croTopBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.croSignInLink {
+  color: #090909;
+  background: #f5f3ef;
+  border-radius: 999px;
+  padding: 9px 15px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auditErrorOverlay { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 24px; background: rgba(3,5,11,.7); backdrop-filter: blur(8px); }
+.auditErrorPopup { position: relative; width: min(420px, 100%); padding: 32px; border: 1px solid rgba(248,113,113,.24); border-radius: 20px; background: #101014; box-shadow: 0 24px 90px rgba(0,0,0,.5); text-align: center; }
+.auditErrorClose { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: 50%; background: transparent; color: rgba(255,255,255,.62); cursor: pointer; }.auditErrorClose:hover { color: #fff; background: rgba(255,255,255,.08); }
+.auditErrorMark { display: grid; place-items: center; width: 34px; height: 34px; margin: 0 auto 12px; border-radius: 50%; background: rgba(248,113,113,.14); color: #fda4af; font-size: 19px; font-weight: 800; }.auditErrorPopup h2 { margin: 0; font-size: 18px; }.auditErrorPopup p { margin: 10px 0 24px; color: rgba(255,255,255,.64); font-size: 14px; line-height: 1.5; }.auditErrorAction { min-height: 40px; width: 100%; border: 0; border-radius: 10px; background: #f8fafc; color: #0b1018; font: inherit; font-size: 13px; font-weight: 750; cursor: pointer; }
+
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* Back link */
+.croBackLink {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.croBackLink:hover {
+  color: #fff;
+}
+
+/* Gate — not signed in */
+.croGate {
+  max-width: 520px;
+  margin: 60px auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 48px 36px;
+  box-sizing: border-box;
+}
+
+.croGate h1 {
+  font-size: 34px;
+  margin: 0;
+}
+
+.croGate .muted {
+  margin: 0;
+}
+
+.croSignInBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 14px 28px;
+  background: #f5f3ef;
+  color: #090909;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.croSignInBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 243, 239, 0.25);
+}
+
+.croInlineLink {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.croInlineLink:hover {
+  color: #fff;
+}
+
+/* Loading */
+.croLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 60vh;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.croSpinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #f5f3ef;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.croPromptWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 24px 0 34px;
+}
+
+.croInputHint {
+  margin: 10px 4px 0;
+  color: rgba(255,255,255,0.45);
+  font-size: 12px;
+}
+
+.croInlineThinking {
+  width: min(100%, 560px);
+  margin: 0 0 12px;
+  color: #f4f4f5;
+}
+
+.croInlineThinking .thought-line__label {
+  color: #f4f4f5;
+}
+
+.croInlineThinking .thought-line__glyph,
+.croInlineThinking .thought-line__timer,
+.croInlineThinking .thought-line__chevron {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.croDelayedProgress {
+  width: min(100%, 460px);
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.croDelayedProgress i {
+  display: block;
+  height: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.croDelayedProgress i::after {
+  display: block;
+  width: 36%;
+  height: 100%;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.78);
+  content: '';
+  animation: cro-progress 1.45s ease-in-out infinite;
+}
+
+@keyframes cro-progress {
+  from { transform: translateX(-115%); }
+  to { transform: translateX(320%); }
+}
+
+.cro button.ghost {
+  min-height: 0;
+  padding: 14px 22px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f5f3ef;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cro button.ghost:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Cards */
+.cro .card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 16px 0;
+  background: #101010;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.14);
+}
+
+.croProgressHeader,
+.croSummaryTop,
+.croPageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.croProgressHeader b {
+  display: block;
+  font-size: 17px;
+}
+
+.croProgressHeader > span {
+  color: rgba(255, 255, 255, 0.78);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.croStatus {
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 999px;
+  color: rgba(255,255,255,0.7);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.croStatus.complete,
+.croStatus.done { color: rgba(255, 255, 255, 0.82); border-color: rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.06); }
+.croStatus.processing { color: rgba(255, 255, 255, 0.78); border-color: rgba(255, 255, 255, 0.17); background: rgba(255, 255, 255, 0.05); }
+.croStatus.error { color: rgba(255, 255, 255, 0.65); border-color: rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.04); }
+
+.croSummaryCard > p {
+  max-width: 720px;
+  margin: 0 0 12px;
+  color: rgba(255,255,255,0.76);
+  line-height: 1.7;
+}
+
+/* Results read as one assistant reply rather than a stack of dashboard panels. */
+.cro .croSummaryCard,
+.cro .croPageCard {
+  max-width: 760px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.cro .croSummaryCard::before {
+  display: block;
+  margin-bottom: 14px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  content: 'CRO audit';
+}
+
+.cro .croPageCard {
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.scoreLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 6px;
+}
+
+.cro .score {
+  font-size: 54px;
+  font-weight: 800;
+  line-height: 1;
+  color: #f5f3ef;
+  margin-bottom: 12px;
+}
+
+.cro .bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 14px 0;
+}
+
+.cro .bar > div {
+  height: 100%;
+  background: #e4e4e7;
+  border-radius: 99px;
+  transition: width 0.4s;
+}
+
+/* Severity badges */
+.cro .sev {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  text-transform: uppercase;
+}
+
+.cro .high,
+.cro .medium,
+.cro .low { background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.72); }
+
+.cro .finding {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 14px 0;
+  line-height: 1.6;
+}
+
+.croPageCard {
+  overflow: hidden;
+}
+
+.croPageHeader {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.croPageHeader b {
+  display: block;
+  font-size: 17px;
+}
+
+.croUrl {
+  display: block;
+  max-width: 720px;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+  color: rgba(255,255,255,0.48);
+  font-size: 12px;
+  line-height: 1.45;
+  text-decoration: none;
+}
+
+.croUrl:hover { color: #fff; text-decoration: underline; }
+
+.cro .finding a {
+  color: #f5f3ef;
+  text-decoration: underline;
+}
+
+.cro .shots {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin: 14px 0;
+  flex-wrap: wrap;
+}
+
+.cro .shots img {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  max-height: 320px;
+  object-fit: cover;
+  object-position: top;
+}
+
+.cro .err {
+  color: rgba(255, 255, 255, 0.82);
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .croIntroContent { padding: 20px; }
+  .croIntroPrompt { width: 90vw; }
+  .croContainer {
+    padding: 24px 16px 60px;
+  }
+  .cro h1 {
+    font-size: 2.5rem;
+  }
+  .croWorkspace { display: block; }
+  .croHistory {
+    position: static;
+    margin: 0 0 28px;
+  }
+  .croHistoryList {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .croHistoryItem { flex: 0 0 145px; }
+  .croGate {
+    padding: 36px 20px;
+  }
+  .croPromptWrap { margin-bottom: 28px; }
+  .croProgressHeader, .croSummaryTop, .croPageHeader { gap: 12px; }
+}

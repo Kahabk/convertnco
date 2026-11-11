@@ -1,0 +1,86 @@
+.audit-prompt-bar {
+  width: min(100%, 560px);
+  padding: 12px;
+  border: 1px solid #353538;
+  border-radius: 18px;
+  background: #27272a;
+  box-sizing: border-box;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.34);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.audit-prompt-bar:focus-within {
+  border-color: #57575d;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.34), 0 0 0 3px rgba(255, 255, 255, 0.035);
+}
+
+.audit-prompt-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #a1a1aa;
+}
+
+.audit-prompt-input-row input {
+  width: 100%;
+  min-width: 0;
+  padding: 5px 0 12px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #f4f4f5;
+  font: inherit;
+  font-size: 15px;
+}
+
+.audit-prompt-input-row input::placeholder { color: #929297; }
+.audit-prompt-input-row input:disabled { opacity: 0.72; }
+
+/* Keep Chrome/Safari password manager and URL autofill from painting the field white. */
+.audit-prompt-input-row input:-webkit-autofill,
+.audit-prompt-input-row input:-webkit-autofill:hover,
+.audit-prompt-input-row input:-webkit-autofill:focus,
+.audit-prompt-input-row input:-webkit-autofill:active {
+  -webkit-text-fill-color: #f4f4f5;
+  caret-color: #f4f4f5;
+  -webkit-box-shadow: 0 0 0 1000px #27272a inset;
+  box-shadow: 0 0 0 1000px #27272a inset;
+  transition: background-color 9999s ease-out 0s;
+}
+
+.audit-prompt-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.audit-prompt-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #c1c1c6;
+  font-size: 12px;
+}
+
+.audit-prompt-send {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: #e4e4e7;
+  color: #27272a;
+  cursor: pointer;
+  transition: transform 150ms ease, background 150ms ease, opacity 150ms ease;
+}
+
+.audit-prompt-send:hover:not(:disabled) { background: #fff; transform: translateY(-1px); }
+.audit-prompt-send:active:not(:disabled) { transform: scale(0.94); }
+.audit-prompt-send:disabled { cursor: default; opacity: 0.38; }
+
+@media (max-width: 600px) {
+  .audit-prompt-bar { width: 100%; }
+}

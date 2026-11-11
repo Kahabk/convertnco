@@ -1,0 +1,482 @@
+/* Full-screen Pricing Overlay Styles */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+
+.pricingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: #07070a;
+  background-image: radial-gradient(ellipse at 40% 0%, rgba(56, 71, 255, 0.18), transparent 60%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #ffffff;
+}
+
+.pricingOverlay::-webkit-scrollbar {
+  display: none;
+}
+
+/* Bottom fade on overlay: 160px gradient from transparent to #07070a */
+.pricingOverlay::after {
+  content: "";
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 160px;
+  background: linear-gradient(to bottom, rgba(7, 7, 10, 0) 0%, #07070a 100%);
+  pointer-events: none;
+  z-index: 25;
+}
+
+/* Fixed Close Button (Top 20px, Right 24px, 40px round) */
+.pricingCloseBtn {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+  cursor: pointer;
+  transition: all 180ms ease;
+  backdrop-filter: blur(12px);
+}
+
+.pricingCloseBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.06);
+}
+
+/* Scrollable Content Wrapper */
+.pricingContentWrapper {
+  position: relative;
+  z-index: 10;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 32px 80px;
+  box-sizing: border-box;
+}
+
+/* LaserFlow Background Layer: inside content wrapper so it grows with the cards without hard 70vh clipping */
+.pricingLaserFlowLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Top Header Area: Above the laser layer (z-index: 20) */
+.pricingTopArea {
+  position: relative;
+  z-index: 20;
+  padding-top: 240px;
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+/* Knockout behind heading so the laser beam dims where text sits */
+.pricingHeadingWrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 820px;
+}
+
+.pricingHeadingWrapper::before {
+  content: "";
+  position: absolute;
+  inset: -40px -120px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(7, 7, 10, 0.69) 0%, rgba(7, 7, 10, 0.56) 45%, rgba(7, 7, 10, 0) 75%);
+  filter: blur(14px);
+}
+
+.pricingTitle {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(40px, 4.2vw, 56px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #f5f3ef;
+  margin: 0 0 10px;
+  line-height: 1.1;
+  text-shadow: 0 2px 20px rgba(7, 7, 10, 0.68);
+}
+
+.pricingSubtitle {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+  line-height: 1.5;
+  text-shadow: 0 2px 20px rgba(7, 7, 10, 0.68);
+}
+
+/* Monthly / Yearly Billing Toggle: z-index 20 with solid background to prevent beam run-through */
+.pricingBillingToggleWrap {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.pricingBillingToggle {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(10, 12, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 4px;
+  gap: 4px;
+  backdrop-filter: blur(10px);
+}
+
+.pricingToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.pricingToggleBtn.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.pricingDiscountBadge {
+  background: rgba(56, 71, 255, 0.15);
+  color: #a5b0ff;
+  border: 1px solid rgba(120, 130, 255, 0.35);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+}
+
+/* 4-Column Pricing Grid: minmax(0, 1fr) with zero negative margin/offsets to prevent clipping */
+.pricingGrid {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+  margin: 0;
+  transform: none;
+}
+
+/* Pricing Card Animation */
+@keyframes pricingCardFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pricingCard {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 20px;
+  min-height: 640px;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+  position: relative;
+  margin: 0;
+  transform: none;
+  animation: pricingCardFadeUp 450ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.pricingCard:nth-child(1) { animation-delay: 60ms; }
+.pricingCard:nth-child(2) { animation-delay: 120ms; }
+.pricingCard:nth-child(3) { animation-delay: 180ms; }
+.pricingCard:nth-child(4) { animation-delay: 240ms; }
+
+.pricingCard:not(.pricingCardPro) {
+  transition: border-color 200ms ease, transform 200ms ease;
+}
+
+.pricingCard:not(.pricingCardPro):hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+}
+
+/* Pro Card Special Styling: violet-blue matching original React Bits look */
+.pricingCard.pricingCardPro {
+  background: #0b0b0d !important;
+  border-color: rgba(120, 130, 255, 0.5) !important;
+  box-shadow: 0 0 70px rgba(80, 90, 255, 0.18);
+}
+
+/* Top Section Inside Card */
+.pricingCardHead {
+  display: flex;
+  flex-direction: column;
+}
+
+.pricingCardTopRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 36px;
+}
+
+.pricingPlanName {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: #f5f3ef;
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.pricingPopularBadge {
+  background: rgba(56, 71, 255, 0.12);
+  color: #a5b0ff;
+  border: 1px solid rgba(120, 130, 255, 0.5);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.pricingPlanTagline {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 8px 0 20px;
+  line-height: 1.4;
+  min-height: 22px;
+}
+
+.pricingPriceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-height: 58px;
+  margin-bottom: 20px;
+}
+
+.pricingPriceAmount {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 54px;
+  font-weight: 400;
+  color: #f5f3ef;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.pricingPricePeriod {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+}
+
+/* Action Button Row */
+.pricingButtonRow {
+  width: 100%;
+}
+
+.pricingBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 180ms ease;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.pricingBtnWhite {
+  background: #ffffff;
+  color: #0a0a0c;
+}
+
+.pricingBtnWhite:hover {
+  background: #f1f5f9;
+  transform: translateY(-1px);
+}
+
+.pricingBtnPro {
+  background: linear-gradient(135deg, #7a86ff 0%, #3847ff 100%);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(80, 90, 255, 0.35);
+}
+
+.pricingBtnPro:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 6px 24px rgba(80, 90, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+.pricingBtnDisabled {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: not-allowed;
+}
+
+.pricingBtnDisabled:hover {
+  transform: none;
+}
+
+/* Divider Line */
+.pricingDivider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 24px 0 20px;
+}
+
+/* Features Body */
+.pricingFeaturesBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.pricingInheritanceRow {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin-bottom: 16px;
+}
+
+.pricingInheritSparkle {
+  color: #8f9bff;
+  flex-shrink: 0;
+}
+
+.pricingInheritSpacer {
+  height: 24px;
+  display: block;
+}
+
+.pricingFeatureList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pricingFeatureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+}
+
+.pricingCheckIcon {
+  color: #8f9bff;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Footnote Pinned to Bottom */
+.pricingFootnote {
+  margin-top: auto;
+  padding-top: 24px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .pricingGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .pricingGrid {
+    grid-template-columns: 1fr;
+  }
+  .pricingTopArea {
+    padding-top: 150px;
+    margin-bottom: 32px;
+  }
+  .pricingHeadingWrapper::before {
+    inset: -30px -40px;
+  }
+  .pricingContentWrapper {
+    padding: 0 20px 60px;
+  }
+  .pricingTitle {
+    font-size: 32px;
+  }
+  .pricingCard {
+    min-height: auto;
+    padding: 24px;
+  }
+  .pricingCloseBtn {
+    top: 14px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  .pricingCard {
+    animation: none !important;
+    transform: none !important;
+  }
+  .pricingCard:not(.pricingCardPro):hover {
+    transform: none !important;
+  }
+  .pricingBtn:hover {
+    transform: none !important;
+  }
+}

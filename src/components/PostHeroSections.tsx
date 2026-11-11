@@ -3,8 +3,8 @@ import { FormEvent } from "react";
 import FigmaServiceCard from "./FigmaServiceCard";
 import PromoTicket from "./PromoTicket";
 import { Link } from "react-router-dom";
-const CONTACT_EMAIL = "hello.creativestudio@gmail.com";
-const BASE_URL = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
+const CONTACT_EMAIL = "kahabhns@gmail.com";
+const BASE_URL = import.meta.env.BASE_URL ?? '';
 
 const assetUrl = (path: string) => {
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
@@ -312,11 +312,15 @@ export default function PostHeroSections() {
       </section>
 
       <footer className="siteFooter">
-        <p>© 2026 Creative Studio</p>
-        <div><a href="#works">Work</a><a href="#services">Services</a><a href="#contact">Contact</a> <Link to="/terms-and-conditions">Terms & Conditions</Link> </div>
-        <a href="#polaroid-hero-container">{"Back to top \u2191\uFE0E"}</a>
-       
-       
+        <p>© 2026 Convert & Co</p>
+        <div>
+          <a href="#works">Work</a>
+          <a href="#services">Services</a>
+          <a href="#contact">Contact</a>
+          <Link to="/cro-audit">Free Audit</Link>
+          <Link to="/terms-and-conditions">Terms & Conditions</Link>
+        </div>
+        <a href="#polaroid-hero-container">{"Back to top ↑\uFE0E"}</a>
       </footer>
     </main>
   );

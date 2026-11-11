@@ -1,4 +1,5 @@
 import { MouseEvent, useRef, useState, useEffect, memo, useCallback } from "react";
+import { Link } from "react-router-dom";
 import "./PolaroidTrailHero.css";
 
 const LOGO_IMAGE = new URL("../../wight_logo.png", import.meta.url).href;
@@ -51,11 +52,12 @@ const STAGE_LABELS = [
 ];
 
 // ── Image preloader ──────────────────────────────────────────────────
-// Decode every trail image into browser memory ONCE at startup so that
+// Decode every trail image into browser memory ONCE so that
 // spawning a new card never triggers a network request (no more 304s).
 const preloadedImages = new Map<string, HTMLImageElement>();
 
 function preloadAllImages() {
+  if (typeof window === 'undefined') return;
   for (const src of SAMPLE_IMAGES) {
     if (preloadedImages.has(src)) continue;
     const img = new Image();
@@ -70,9 +72,6 @@ function preloadAllImages() {
     preloadedImages.set(LOGO_IMAGE, logo);
   }
 }
-
-// Kick off preloading immediately at module load (before React mounts)
-preloadAllImages();
 
 // ── Types ────────────────────────────────────────────────────────────
 interface PolaroidCardData {
@@ -171,6 +170,7 @@ export default function PolaroidTrailHero() {
   }, []);
 
   useEffect(() => {
+    preloadAllImages();
     let animationFrameId: number;
 
     // Initialize starting coordinates at the center of the viewport
@@ -323,7 +323,7 @@ export default function PolaroidTrailHero() {
           <a className="pNavLink" href="#works">Works</a>
           <a className="pNavLink" href="#studio">Studio</a>
           <a className="pNavLink" href="#services">Services</a>
-          <a className="pNavLink" href="mailto:hello@example.com">Contact</a>
+          <a className="pNavLink" href="mailto:kahabhns@gmail.com">Contact</a>
         </nav>
       </header>
 
@@ -345,9 +345,9 @@ export default function PolaroidTrailHero() {
 
         <div className="newHeroCta">
           <div className="newHeroButtons">
-            <a href="#contact" className="newHeroPrimary">
-              Get a free store audit <span>↘</span>
-            </a>
+            <Link to="/cro-audit" className="newHeroPrimary">
+              Get a free store audit <span>↗</span>
+            </Link>
 
             <a href="#contact" className="newHeroSecondary">
               Book a 20-min call

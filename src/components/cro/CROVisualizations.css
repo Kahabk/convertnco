@@ -1,0 +1,45 @@
+.croVisualizations { max-width: 900px; margin: 44px 0 20px; }
+.croVisualizationHeading { margin-bottom: 18px; }
+.croVisualizationHeading span { color: #f4f4f5; font-size: 18px; font-weight: 600; }
+.croVisualizationHeading p, .croVizCard > p { margin: 7px 0 0; color: rgba(255,255,255,.5); font-size: 13px; line-height: 1.55; }
+.croVizGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.croVizCard { min-width: 0; padding: 19px; border: 1px solid rgba(255,255,255,.1); border-radius: 14px; background: rgba(255,255,255,.025); }
+.croVizCardWide { grid-column: span 2; }
+.croVizCard h3 { margin: 0; color: #f4f4f5; font-size: 15px; font-weight: 600; }
+.croVizEmpty { margin: 24px 0 6px; color: rgba(255,255,255,.46); font-size: 13px; line-height: 1.5; }
+.croRadar { display: flex; flex-direction: column; gap: 14px; margin-top: 18px; }
+.croRadarSvg { display: block; width: min(100%, 520px); min-height: 310px; margin: 0 auto; overflow: visible; }
+.croRadar .croVizDetail { width: min(100%, 520px); box-sizing: border-box; margin: 0 auto; }
+.croRadarGrid { fill: none; stroke: rgba(255,255,255,.1); stroke-width: .45; }
+.croRadarAxis { stroke: rgba(255,255,255,.12); stroke-width: .45; }
+.croRadarArea { fill: rgba(255,255,255,.12); stroke: rgba(255,255,255,.8); stroke-width: .7; }
+.croRadarPoint { fill: #fff; stroke: #18181b; stroke-width: .8; cursor: pointer; outline: none; }
+.croRadarPoint:focus { stroke: #fff; stroke-width: 1.8; }
+.croRadarLabel { fill: rgba(255,255,255,.62); font-size: 3.4px; pointer-events: none; }
+.croVizDetail { padding: 12px; border: 1px solid rgba(255,255,255,.09); border-radius: 9px; background: rgba(255,255,255,.035); color: #f4f4f5; font-size: 13px; line-height: 1.5; }
+.croVizDetail p { margin: 6px 0 0; color: rgba(255,255,255,.62); }
+.croVizDetail small { color: rgba(255,255,255,.45); }
+.croHeatmap { margin-top: 18px; }
+.croVizControls { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.croVizControls > div { display: flex; gap: 5px; }
+.croVizControls button { padding: 6px 9px; border: 1px solid rgba(255,255,255,.12); border-radius: 7px; background: transparent; color: rgba(255,255,255,.58); font: inherit; font-size: 12px; text-transform: capitalize; cursor: pointer; }
+.croVizControls button.isActive, .croVizControls button:hover { background: rgba(255,255,255,.1); color: #fff; }
+.croHeatmapCanvas { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,.12); border-radius: 10px; background: #111; }
+.croHeatmapCanvas.mobile { width: min(100%, 280px); }
+.croHeatmapCanvas img, .croHeatmapCanvas svg { display: block; width: 100%; height: auto; }
+.croHeatmapCanvas svg { position: absolute; inset: 0; height: 100%; }
+.croHeatmapRegion { fill: transparent; stroke: rgba(255,255,255,.9); stroke-width: 2; vector-effect: non-scaling-stroke; cursor: pointer; }
+.croHeatmapRegion:hover, .croHeatmapRegion:focus { stroke-width: 3; }
+.croVizNote { margin: 9px 0 0; color: rgba(255,255,255,.4); font-size: 11px; line-height: 1.45; }
+.croHeatmap .croVizDetail { margin-top: 12px; }
+.croMatrix { margin-top: 18px; }
+.croMatrixSvg { display: block; width: 100%; max-height: 345px; overflow: visible; }
+.croMatrixQuick, .croMatrixStrategic, .croMatrixMinor, .croMatrixLow { fill: rgba(255,255,255,.03); }
+.croMatrixStrategic { fill: rgba(255,255,255,.05); }
+.croMatrixLines { fill: none; stroke: rgba(255,255,255,.2); stroke-width: .5; }
+.croMatrixZone, .croMatrixAxisLabel { fill: rgba(255,255,255,.42); font-size: 3px; }
+.croMatrixAxisLabel { font-size: 3.3px; }
+.croMatrixPoint { fill: #fff; stroke: #18181b; stroke-width: 1; cursor: pointer; outline: none; transition: r 150ms ease; }
+.croMatrixPoint:hover, .croMatrixPoint:focus { r: 3.8; stroke: rgba(255,255,255,.5); }
+.croMatrix .croVizDetail { margin-top: 14px; }
+@media (max-width: 720px) { .croVizGrid { grid-template-columns: 1fr; } .croVizCardWide { grid-column: auto; } .croRadarSvg { min-height: 270px; } }
