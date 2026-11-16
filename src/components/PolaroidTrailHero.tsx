@@ -320,7 +320,7 @@ export default function PolaroidTrailHero() {
           <img className="pLogoImage" src={LOGO_IMAGE} alt="Creative studio logo" />
         </div>
         <nav className="pNav" id="p-nav">
-          <a className="pNavLink" href="#works">Works</a>
+          <Link className="pNavLink" to="/work">Works</Link>
           <a className="pNavLink" href="#studio">Studio</a>
           <a className="pNavLink" href="#services">Services</a>
           <a className="pNavLink" href="mailto:kahabhns@gmail.com">Contact</a>

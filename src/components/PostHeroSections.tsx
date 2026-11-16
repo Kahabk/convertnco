@@ -13,27 +13,38 @@ const assetUrl = (path: string) => {
 };
 
 const FEATURE_IMAGE = assetUrl("new.jpg");
+const CASE_STUDY_ASSETS = import.meta.glob("../../k_stady/**/*.{png,jpg,jpeg}", {
+  eager: true,
+  import: "default",
+  query: "?url",
+}) as Record<string, string>;
+
+const CASE_STUDY_IMAGE = (path: string) => CASE_STUDY_ASSETS[`../../${path}`];
 
 const PROJECTS = [
   {
-    image: assetUrl("web_aset/Screenshot from 2026-07-05 17-03-46.png"),
-    title: "Sneaker Commerce Experience",
-    category: "Shopify design · Development · CRO",
+    image: CASE_STUDY_IMAGE("k_stady/store_1/image.png"),
+    title: "MPR Sportswear",
+    category: "Storefront strategy · Mobile commerce · CRO",
+    slug: "mpr-sportswear",
   },
   {
-    image: assetUrl("web_aset/work_2.png"),
-    title: "Dark Sneaker Product Page",
-    category: "Ecommerce · Product advertising · Art direction",
+    image: CASE_STUDY_IMAGE("k_stady/store_2/WEDKO_cover.png"),
+    title: "Wink Home",
+    category: "Mobile UX · Cart clarity · CRO",
+    slug: "wink-home",
   },
   {
-    image: assetUrl("web_aset/bf3296fd6e1fa88ffb50a9567150fb56.jpg"),
-    title: "Lucir Fashion Store",
-    category: "Ecommerce · Art direction · Campaign",
+    image: CASE_STUDY_IMAGE("k_stady/store_3/Home Page 1.png"),
+    title: "Street Vault",
+    category: "Collection UX · Product discovery · CRO",
+    slug: "street-vault",
   },
   {
-    image: assetUrl("web_aset/mocup.png"),
-    title: "Shopify Gift & Rewards App",
-    category: "Shopify App · UX/UI · Mobile Experience",
+    image: CASE_STUDY_IMAGE("k_stady/store_4/cover_image.png"),
+    title: "Rider Parts",
+    category: "Merchandising · Storefront UX · CRO",
+    slug: "rider-parts",
   },
 ];
 
@@ -105,10 +116,10 @@ export default function PostHeroSections() {
             decoding="async"
             fetchPriority="high"
           />
-          <a className="featureButton" href="#selected-work" aria-label="View selected work">
+          <Link className="featureButton" to="/work" aria-label="View selected work">
             <span>View</span>
             <span className="featureArrow">{"\u2198\uFE0E"}</span>
-          </a>
+          </Link>
         </div>
 
         <div className="featureIntro">
@@ -128,7 +139,7 @@ export default function PostHeroSections() {
 
         <div className="projectGrid">
           {PROJECTS.map((project, index) => (
-            <article className="projectCard" key={project.title}>
+            <Link to={`/work/${project.slug}`} className="projectCard" key={project.title}>
               <div className="projectImageWrap">
                 <img src={project.image} alt={project.title} loading="lazy" decoding="async" />
                 <span className="projectNumber">0{index + 2}</span>
@@ -137,9 +148,10 @@ export default function PostHeroSections() {
                 <h3>{project.title}</h3>
                 <p>{project.category}</p>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
+        <Link className="projectsAllLink" to="/work">View all case studies <span>↗</span></Link>
       </section>
 
       <section className="logoSection" id="clients" aria-label="Selected clients">
