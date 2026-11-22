@@ -236,6 +236,8 @@ export default function PricingModal({
             seed={3}
             mouseInteraction
             intro
+            revealImage={undefined}
+            dpr={undefined}
           />
         </div>
 

@@ -10,7 +10,7 @@ import PostHeroSections from './components/PostHeroSections';
 import TermsAndConditions from './pages/TermsAndCondition';
 import CroAudit from './pages/CroAudit';
 import AuthPage from './pages/AuthPage';
-import { CaseStudy, WorkCatalogue } from './pages/Work';
+import { WorkCatalogue } from './pages/Work';
 
 function HomePage() {
   return (
@@ -30,7 +30,6 @@ export default function App() {
         <Route path="/cro-audit"          element={<CroAudit />} />
         <Route path="/auth"               element={<AuthPage />} />
         <Route path="/work"               element={<WorkCatalogue />} />
-        <Route path="/work/:slug"         element={<CaseStudy />} />
         {/* Legacy / alias routes */}
         <Route path="/sign-in"            element={<AuthPage />} />
         <Route path="/sign-up"            element={<AuthPage />} />

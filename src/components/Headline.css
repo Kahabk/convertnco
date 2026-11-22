@@ -1,0 +1,47 @@
+.mixedHeadline.mixedHeadline {
+  max-width: 1100px;
+  margin: 0;
+  color: #ffffff;
+  font-family: "Geist Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(2.5rem, 7vw, 6.5rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  padding-left: 0;
+  text-align: left;
+  text-indent: 0;
+  text-wrap: balance;
+  white-space: normal;
+}
+
+.hl-part {
+  display: inline-block;
+  white-space: normal;
+}
+
+.hl-strong { color: #ffffff; }
+
+.hl-dim { color: #808080; }
+
+.mixedHeadline .hl-strong,
+.mixedHeadline .hl-dim {
+  font-family: "Geist Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+.hl-accent {
+  color: #d9382b;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.1em;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.hl-underline {
+  border-bottom: 2px dotted currentColor;
+  padding-bottom: 0.05em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hl-part { transform: none !important; }
+}
