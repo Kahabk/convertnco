@@ -166,7 +166,7 @@ async function openrouter(system: string, prompt: string, images: Img[] = []) {
 
   if (!r.ok) {
     const errText = await r.text();
-    throw new Error(`OpenRouter ${r.status}: ${errText.slice(0, 200)}`);
+    throw new Error('OpenRouter ' + r.status +': ' + errText.slice(0, 200));
   }
 
   const j: any = await r.json();
@@ -222,7 +222,7 @@ Core evaluation criteria:
 4. Friction Reduction: Are forms minimal and clean? Are steps clear?
 5. Content & Messaging: Does the copy focus on customer benefits over company features?
 6. Scannability & Hierarchy: Headings (H1/H2), bullet points, clear sections.
-
+7. Mobile Usability: Is the page mobile-friendly, responsive, and touch-optimized?
 Rules:
 - NEVER give vague advice like "improve UX" or "make it modern". Be concrete: state exact element, current issue, and exact recommended change.
 - Quote actual elements or text from the scraped data in the "evidence" field.

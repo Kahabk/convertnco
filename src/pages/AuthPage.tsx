@@ -8,6 +8,8 @@ import {
 } from '../lib/firebase';
 import './Auth.css';
 
+const logoImage = new URL('../../wight_logo.webp', import.meta.url).href;
+
 type AuthMode = 'signin' | 'signup' | 'reset';
 
 export default function AuthPage() {
@@ -69,7 +71,13 @@ export default function AuthPage() {
   return (
     <div className="authPage">
       <Link to="/" className="authLogo">
-        <img src="/wight_logo.png" alt="Convert & Co" />
+        <img
+          src={logoImage}
+          alt="Convert & Co"
+          width="200"
+          height="250"
+          decoding="async"
+        />
       </Link>
 
       <div className="authCard">

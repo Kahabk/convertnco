@@ -1,59 +1,121 @@
-import { motion, useReducedMotion } from "motion/react";
 import { projects } from "@/src/data/projects";
 import styles from "./WorkShowcase.module.css";
 
+const imagePresentation: Record<
+  string,
+  { width: number; height: number; mobileImage: string }
+> = {
+  "website-cro-audit-primary": {
+    width: 3840,
+    height: 2160,
+    mobileImage: "/images/portfolio/website-cro-audit-mobile.webp",
+  },
+  "zipo-primary": {
+    width: 1436,
+    height: 1095,
+    mobileImage: "/images/portfolio/zipo-mockup-mobile.webp",
+  },
+  "zipo-secondary": {
+    width: 1920,
+    height: 1440,
+    mobileImage: "/images/portfolio/zipo-product-scene-mobile.webp",
+  },
+  "potted-head-primary": {
+    width: 1658,
+    height: 949,
+    mobileImage: "/images/portfolio/potted-head-mobile.webp",
+  },
+  "shifa-primary": {
+    width: 1435,
+    height: 1096,
+    mobileImage: "/images/portfolio/shifa-sdg-dashboard-mobile.webp",
+  },
+  "ravco-primary": {
+    width: 1097,
+    height: 823,
+    mobileImage: "/images/portfolio/ravco-storefront-mobile.webp",
+  },
+  "moto-commerce-primary": {
+    width: 1672,
+    height: 941,
+    mobileImage: "/images/portfolio/moto-commerce-mobile.webp",
+  },
+};
+
+const projectImages = projects.flatMap((project) => {
+  const primaryKey = `${project.id}-primary`;
+  const primaryImage = {
+    key: primaryKey,
+    title: project.title,
+    image: project.image,
+    imageAlt: project.imageAlt,
+    href: project.liveUrl ?? project.caseUrl,
+    ...(imagePresentation[primaryKey] ?? {
+      width: 1920,
+      height: 1080,
+      mobileImage: project.image,
+    }),
+  };
+
+  if (!project.secondaryImage) return [primaryImage];
+
+  const secondaryKey = `${project.id}-secondary`;
+  return [
+    primaryImage,
+    {
+      key: secondaryKey,
+      title: project.title,
+      image: project.secondaryImage,
+      imageAlt: project.secondaryImageAlt ?? `${project.title} project preview`,
+      href: project.liveUrl ?? project.caseUrl,
+      ...(imagePresentation[secondaryKey] ?? {
+        width: 1920,
+        height: 1080,
+        mobileImage: project.secondaryImage,
+      }),
+    },
+  ];
+});
+
 export default function SelectedWorkSection() {
-  const prefersReducedMotion = useReducedMotion();
-
   return (
-    <section className={styles.selectedProjects} aria-labelledby="selected-projects-title">
-      <div className={styles.selectedProjectsInner}>
-        <header className={styles.selectedProjectsHeader}>
-          <p className={styles.selectedProjectsLabel}>Selected Work</p>
-          <h2 id="selected-projects-title">Built to be seen. Designed to convert.</h2>
-          <p>A closer look at storefronts shaped around stronger stories and clearer customer journeys.</p>
-        </header>
+    <section className={styles.selectedProjectsFullscreen} aria-label="Selected work">
+      <div className={styles.selectedWorkFullscreenList}>
+        {projectImages.map((project) => {
+          const image = (
+            <picture className={styles.selectedWorkFullscreenPicture}>
+              <source media="(max-width: 700px)" srcSet={project.mobileImage} />
+              <img
+                className={styles.selectedWorkFullscreenImage}
+                src={project.image}
+                alt={project.imageAlt}
+                width={project.width}
+                height={project.height}
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          );
 
-        <div className={styles.selectedProjectsList}>
-          {projects.map((project, index) => (
-            <motion.article
-              className={`${styles.selectedProjectRow} ${["zipo", "shifa", "ravco", "moto-commerce"].includes(project.id) ? styles.selectedProjectFeatured : ""} ${project.id === "ravco" ? styles.selectedProjectRavco : ""} ${project.id === "moto-commerce" ? styles.selectedProjectMoto : ""}`}
-              id={project.id}
-              key={project.id}
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 44 }}
-              whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.16 }}
-              transition={{ duration: 0.7, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
+          if (!project.href) {
+            return (
+              <article className={styles.selectedWorkFullscreenItem} key={project.key}>
+                {image}
+              </article>
+            );
+          }
+
+          return (
+            <a
+              className={styles.selectedWorkFullscreenItem}
+              href={project.href}
+              key={project.key}
+              aria-label={`View ${project.title}`}
             >
-              <div className={styles.selectedProjectImage}>
-                <img
-                  src={project.image}
-                  alt={project.imageAlt}
-                  width="1600"
-                  height="1000"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-
-              <div className={styles.selectedProjectCopy}>
-                <div className={styles.selectedProjectMeta}>
-                  <span aria-label={`Project ${index + 1}`}>{String(index + 1).padStart(2, "0")}</span>
-                  <p>{project.category}</p>
-                </div>
-                <h3>{project.title}</h3>
-                <p className={styles.selectedProjectDescription}>{project.description}</p>
-                <ul className={styles.selectedProjectTags} aria-label={`${project.title} technologies and services`}>
-                  {project.tags.map((tag) => <li key={tag}>{tag}</li>)}
-                </ul>
-                <div className={styles.selectedProjectActions}>
-                  <a className={styles.selectedProjectPrimary} href={project.liveUrl}>View Live</a>
-                  <a className={styles.selectedProjectSecondary} href={project.caseUrl}>Case Study</a>
-                </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
+              {image}
+            </a>
+          );
+        })}
       </div>
     </section>
   );

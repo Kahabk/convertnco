@@ -12,36 +12,29 @@ const assetUrl = (path: string) => {
   return `${base}${cleanPath}`;
 };
 
-const FEATURE_IMAGE = assetUrl("new.jpg");
-const CASE_STUDY_ASSETS = import.meta.glob("../../k_stady/**/*.{png,jpg,jpeg}", {
-  eager: true,
-  import: "default",
-  query: "?url",
-}) as Record<string, string>;
-
-const CASE_STUDY_IMAGE = (path: string) => CASE_STUDY_ASSETS[`../../${path}`];
+const FEATURE_IMAGE = new URL("../../new.jpg", import.meta.url).href;
 
 const PROJECTS = [
   {
-    image: CASE_STUDY_IMAGE("k_stady/store_1/image.png"),
+    image: assetUrl("case-studies/store_1/image.webp"),
     title: "MPR Sportswear",
     category: "Storefront strategy · Mobile commerce · CRO",
     slug: "mpr-sportswear",
   },
   {
-    image: CASE_STUDY_IMAGE("k_stady/store_2/WEDKO_cover.png"),
+    image: assetUrl("case-studies/store_2/WEDKO_cover.webp"),
     title: "Wink Home",
     category: "Mobile UX · Cart clarity · CRO",
     slug: "wink-home",
   },
   {
-    image: CASE_STUDY_IMAGE("k_stady/store_3/Home Page 1.png"),
+    image: assetUrl("case-studies/store_3/Home Page 1.webp"),
     title: "Street Vault",
     category: "Collection UX · Product discovery · CRO",
     slug: "street-vault",
   },
   {
-    image: CASE_STUDY_IMAGE("k_stady/store_4/cover_image.png"),
+    image: assetUrl("case-studies/store_4/cover_image.webp"),
     title: "Rider Parts",
     category: "Merchandising · Storefront UX · CRO",
     slug: "rider-parts",
@@ -63,7 +56,10 @@ const LOGOS = [
   src: assetUrl(`logos/${fileName}`),
 }));
 
-const STORY_IMAGE = assetUrl("imgeasset/2b8cce776b5f51248b9e159e2f7d3245.jpg");
+const STORY_IMAGE = new URL(
+  "../../imgeasset/2b8cce776b5f51248b9e159e2f7d3245.jpg",
+  import.meta.url,
+).href;
 
 const SERVICES = [
   ["01", "Shopify websites", "Premium storefronts engineered for conversion and scale"],
@@ -79,7 +75,11 @@ const PROCESS = [
   ["04", "Scale", "We launch campaigns, learn from data and improve continuously."],
 ];
 
-export default function PostHeroSections() {
+type PostHeroSectionsProps = {
+  showPortfolio?: boolean;
+};
+
+export default function PostHeroSections({ showPortfolio = true }: PostHeroSectionsProps) {
   const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -107,8 +107,8 @@ export default function PostHeroSections() {
   };
 
   return (
-    <main className="postHero">
-      <section className="featureSection" id="works">
+    <div className="postHero">
+      {showPortfolio && <section className="featureSection" id="works">
         <div className="featureMedia">
           <img
             src={FEATURE_IMAGE}
@@ -129,9 +129,9 @@ export default function PostHeroSections() {
             We build premium Shopify stores, automate the work behind them and create marketing that turns products into growth.
           </p>
         </div>
-      </section>
+      </section>}
 
-      <section className="projectsSection" id="selected-work">
+      {showPortfolio && <section className="projectsSection" id="selected-work">
         <header className="projectsHeader">
           <p className="sectionKicker">Recent work</p>
           <p>Commerce, automation and campaigns<br />built as one connected system.</p>
@@ -152,7 +152,7 @@ export default function PostHeroSections() {
           ))}
         </div>
         <Link className="projectsAllLink" to="/work">View all case studies <span>↗</span></Link>
-      </section>
+      </section>}
 
       <section className="logoSection" id="clients" aria-label="Selected clients">
         <div className="logoSectionIntro">
@@ -334,6 +334,6 @@ export default function PostHeroSections() {
         </div>
         <a href="#polaroid-hero-container">{"Back to top ↑\uFE0E"}</a>
       </footer>
-    </main>
+    </div>
   );
 }

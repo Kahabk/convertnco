@@ -2,7 +2,7 @@ import { MouseEvent, useRef, useState, useEffect, memo, useCallback } from "reac
 import { Link } from "react-router-dom";
 import "./PolaroidTrailHero.css";
 
-const LOGO_IMAGE = new URL("../../wight_logo.png", import.meta.url).href;
+const LOGO_IMAGE = new URL("../../wight_logo.webp", import.meta.url).href;
 
 // Local campaign artwork used by the cursor-trail animation.
 const SAMPLE_IMAGES = [
@@ -51,26 +51,33 @@ const STAGE_LABELS = [
   "LIGHT NOTICE WIDE",
 ];
 
-// ── Image preloader ──────────────────────────────────────────────────
-// Decode every trail image into browser memory ONCE so that
-// spawning a new card never triggers a network request (no more 304s).
+// Warm only the first few trail images after the critical page load.
 const preloadedImages = new Map<string, HTMLImageElement>();
 
-function preloadAllImages() {
-  if (typeof window === 'undefined') return;
-  for (const src of SAMPLE_IMAGES) {
-    if (preloadedImages.has(src)) continue;
-    const img = new Image();
-    img.decoding = "async";
-    img.src = src;
-    preloadedImages.set(src, img);
-  }
-  // Also preload the logo
-  if (!preloadedImages.has(LOGO_IMAGE)) {
-    const logo = new Image();
-    logo.src = LOGO_IMAGE;
-    preloadedImages.set(LOGO_IMAGE, logo);
-  }
+function scheduleTrailImageWarmup() {
+  const warmImages = () => {
+    for (const src of SAMPLE_IMAGES.slice(0, 4)) {
+      if (preloadedImages.has(src)) continue;
+      const img = new Image();
+      img.decoding = "async";
+      img.src = src;
+      preloadedImages.set(src, img);
+    }
+  };
+
+  let idleCallback = 0;
+  const timeout = window.setTimeout(() => {
+    if ("requestIdleCallback" in window) {
+      idleCallback = window.requestIdleCallback(warmImages, { timeout: 2000 });
+    } else {
+      warmImages();
+    }
+  }, 1500);
+
+  return () => {
+    window.clearTimeout(timeout);
+    if (idleCallback) window.cancelIdleCallback(idleCallback);
+  };
 }
 
 // ── Types ────────────────────────────────────────────────────────────
@@ -139,6 +146,8 @@ export default function PolaroidTrailHero() {
   const isMouseMovingRef = useRef(false);
   const idleTimeoutRef = useRef<any>(null);
   const lastRenderRef = useRef(0);
+  const animationFrameRef = useRef(0);
+  const startAnimationRef = useRef<() => void>(() => undefined);
 
   // Cache the bounding rect instead of calling getBoundingClientRect every mouse move
   const cachedRectRef = useRef<DOMRect | null>(null);
@@ -161,6 +170,7 @@ export default function PolaroidTrailHero() {
     };
 
     isMouseMovingRef.current = true;
+    startAnimationRef.current();
 
     // Clear and reset the idle timer
     if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
@@ -170,8 +180,7 @@ export default function PolaroidTrailHero() {
   }, []);
 
   useEffect(() => {
-    preloadAllImages();
-    let animationFrameId: number;
+    const cancelImageWarmup = scheduleTrailImageWarmup();
 
     // Initialize starting coordinates at the center of the viewport
     if (containerRef.current) {
@@ -181,6 +190,10 @@ export default function PolaroidTrailHero() {
       mousePosRef.current = { x: cx, y: cy };
       lerpedPosRef.current = { x: cx, y: cy };
       lastSpawnPosRef.current = { x: cx, y: cy };
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce), (hover: none), (pointer: coarse)").matches) {
+      return () => cancelImageWarmup();
     }
 
     const tick = () => {
@@ -199,7 +212,7 @@ export default function PolaroidTrailHero() {
 
       // Skip React render entirely when idle and no cards visible
       if (!isMouseMovingRef.current && cardsRef.current.length === 0) {
-        animationFrameId = requestAnimationFrame(tick);
+        animationFrameRef.current = 0;
         return;
       }
 
@@ -209,7 +222,7 @@ export default function PolaroidTrailHero() {
       // virtual DOM diffs and reconciliations.
       const now = Date.now();
       if (now - lastRenderRef.current < 33) {
-        animationFrameId = requestAnimationFrame(tick);
+        animationFrameRef.current = requestAnimationFrame(tick);
         return;
       }
       lastRenderRef.current = now;
@@ -293,13 +306,19 @@ export default function PolaroidTrailHero() {
         return alive;
       });
 
-      animationFrameId = requestAnimationFrame(tick);
+      animationFrameRef.current = requestAnimationFrame(tick);
     };
 
-    animationFrameId = requestAnimationFrame(tick);
+    startAnimationRef.current = () => {
+      if (animationFrameRef.current) return;
+      animationFrameRef.current = requestAnimationFrame(tick);
+    };
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      cancelImageWarmup();
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = 0;
+      startAnimationRef.current = () => undefined;
       if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
     };
   }, []);
@@ -317,10 +336,18 @@ export default function PolaroidTrailHero() {
       {/* 1. Header */}
       <header className="pHeader" id="p-header">
         <div className="pLogo" id="p-logo">
-          <img className="pLogoImage" src={LOGO_IMAGE} alt="Creative studio logo" />
+          <img
+            className="pLogoImage"
+            src={LOGO_IMAGE}
+            alt="Creative studio logo"
+            width="200"
+            height="250"
+            decoding="async"
+            fetchPriority="high"
+          />
         </div>
         <nav className="pNav" id="p-nav">
-          <Link className="pNavLink" to="/work">Works</Link>
+          <a className="pNavLink" href="#works">Works</a>
           <a className="pNavLink" href="#studio">Studio</a>
           <a className="pNavLink" href="#services">Services</a>
           <a className="pNavLink" href="mailto:kahabhns@gmail.com">Contact</a>

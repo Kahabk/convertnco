@@ -11,6 +11,11 @@ const dressStoreImage = new URL(
   import.meta.url,
 ).href;
 const secondWorkImage = new URL("../../../Group 1.png", import.meta.url).href;
+const thirdWorkImage = new URL("../../../Scene 1.webp", import.meta.url).href;
+const fourthWorkImage = new URL(
+  "../../../Potted Head App in Cinematic Phone Scene.webp",
+  import.meta.url,
+).href;
 
 export type WorkGalleryProject = {
   image: string;
@@ -20,8 +25,8 @@ export type WorkGalleryProject = {
 export const workGalleryProjects: WorkGalleryProject[] = [
   { image: "/work/work-1.png", label: "Commerce, Refined" },
   { image: "/work/work-2.png", label: "Objects of Desire" },
-  { image: "/work/work-3.png", label: "Built for Momentum" },
-  { image: "/work/work-4.png", label: "Designed to Perform" },
+  { image: thirdWorkImage, label: "Built for Momentum" },
+  { image: fourthWorkImage, label: "Designed to Perform" },
   { image: "/design-sense.png", label: "Our Design Sense" },
 ];
 

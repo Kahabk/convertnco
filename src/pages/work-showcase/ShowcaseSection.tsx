@@ -3,46 +3,70 @@ import FlexCarousel, { type FlexCarouselItem } from "@/components/FlexCarousel";
 import Headline from "@/src/components/Headline";
 import styles from "./WorkShowcase.module.css";
 
+const zipoProductScene = new URL("../../../Scene 1.webp", import.meta.url).href;
+const pottedHeadScene = new URL(
+  "../../../Potted Head App in Cinematic Phone Scene.webp",
+  import.meta.url,
+).href;
+
 const items: FlexCarouselItem[] = [
   {
-    src: "/images/convert_co/group-1.png",
+    src: "/images/portfolio/website-cro-audit.webp",
+    alt: "Website CRO Audit displayed on a MacBook resting on a dark stone landscape.",
+    title: "Website CRO Audit",
+    subtitle: "Conversion Research Tool",
+  },
+  {
+    src: "/images/portfolio/moto-commerce.webp",
     alt: "Four mobile storefront screens for a motorcycle exhaust shop displayed over a red dusk landscape.",
     title: "Moto Commerce",
   },
   {
-    src: "/images/convert_co/image.png",
+    src: "/images/convert_co/image.webp",
     alt: "Puma Classic Court product page with blue sneakers and an open shopping cart.",
     title: "Sneaker Storefront",
   },
   {
-    src: "/images/convert_co/mockup.png",
+    src: "/images/convert_co/mockup.webp",
     alt: "Pink-background phone mockups presenting the WEDKO gift and stationery shopping app.",
     title: "WEDKO Mobile",
   },
   {
-    src: "/images/convert_co/wedko.png",
+    src: "/images/convert_co/wedko.webp",
     alt: "WEDKO gift and stationery app design board with mobile screens, mockups, and a color palette.",
     title: "WEDKO Design System",
   },
   {
-    src: "/images/convert_co/group-2.png",
+    src: "/images/convert_co/group-2.webp",
     alt: "Blue and violet mossy landscape with the Convert and Co circular gradient mark above the hills.",
     title: "Convert & Co",
   },
   {
-    src: "/images/portfolio/zipo-mockup.png",
+    src: "/images/portfolio/zipo-mockup.webp",
     alt: "Desktop monitor displaying the Zipo sneaker storefront with a purple shoe hero, product grid, and open shopping cart drawer.",
     title: "Zipo",
     subtitle: "E-commerce Storefront",
   },
   {
-    src: "/images/portfolio/shifa-sdg-dashboard.png",
+    src: zipoProductScene,
+    alt: "Zipo Nike Street Flex product page displayed across a folding laptop in a softly lit studio scene.",
+    title: "Zipo Product Experience",
+    subtitle: "E-commerce Product Design",
+  },
+  {
+    src: pottedHeadScene,
+    alt: "The Potted Head shopping app displayed on a floating phone among dark cinematic rock formations.",
+    title: "The Potted Head",
+    subtitle: "Mobile Commerce",
+  },
+  {
+    src: "/images/portfolio/shifa-sdg-dashboard.webp",
     alt: "Shifa SDG challenge dashboard displayed on a laptop against a purple background.",
     title: "Shifa",
     subtitle: "SDG Challenge Platform",
   },
   {
-    src: "/images/portfolio/ravco-storefront.png",
+    src: "/images/portfolio/ravco-storefront.webp",
     alt: "RAVCO sleep and wellness storefront displayed on a desktop monitor in a warm wood interior.",
     title: "RAVCO",
     subtitle: "Sleep & Wellness Storefront",

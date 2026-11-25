@@ -4,18 +4,23 @@ import GlassFrame from "./GlassFrame";
 import styles from "./WorkShowcase.module.css";
 
 const showcaseImage = new URL(
-  "../../../screencapture-chikenfy-myshopify-2026-11-19-21_36_39.png",
+  "../../../screencapture-chikenfy-myshopify-2026-11-19-21_36_39.webp",
   import.meta.url,
 ).href;
-const shrubsImage = new URL("../../../3deffeact.png", import.meta.url).href;
+const shrubsImage = new URL("../../../3deffeact.webp", import.meta.url).href;
 const heroBackgroundImage = new URL(
-  "../../../Mossy Hills Beneath a Mauve Twilight.png",
+  "../../../Mossy Hills Beneath a Mauve Twilight.webp",
   import.meta.url,
 ).href;
 
-export default function Hero() {
+type HeroProps = {
+  headingLevel?: "h1" | "h2";
+};
+
+export default function Hero({ headingLevel = "h1" }: HeroProps) {
   const heroRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const Heading = headingLevel;
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
@@ -45,7 +50,7 @@ export default function Hero() {
       />
       <div className={styles.heroCopy}>
         <p className={styles.eyebrow}>Independent Shopify design studio</p>
-        <h1 id="work-showcase-title">Shopify stores built to convert, not just launch.</h1>
+        <Heading id="work-showcase-title">Shopify stores built to convert, not just launch.</Heading>
         <p className={styles.heroDescription}>
           We design and build high-performance storefronts for ambitious brands.<br />
           Clearer journeys, stronger stories, and fewer reasons to leave.

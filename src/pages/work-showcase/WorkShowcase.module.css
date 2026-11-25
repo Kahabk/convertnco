@@ -18,6 +18,43 @@
 
 .page main { overflow: visible; }
 
+.embeddedPage {
+  position: relative;
+  scroll-margin-top: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.embeddedPage::before {
+  position: absolute;
+  z-index: 30;
+  top: -1px;
+  right: 0;
+  left: 0;
+  height: 180px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.035), transparent);
+  content: "";
+  pointer-events: none;
+}
+
+.embeddedDivider {
+  position: absolute;
+  z-index: 40;
+  top: 0;
+  right: clamp(1.25rem, 4vw, 4rem);
+  left: clamp(1.25rem, 4vw, 4rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.25rem;
+  color: rgba(255, 255, 255, 0.44);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
 .page h1,
 .page h2 {
   font-family: "Cormorant Garamond", Georgia, serif;
@@ -86,8 +123,8 @@
 
 .hero {
   position: relative;
-  min-height: 145vh;
-  padding: clamp(8rem, 13vw, 12rem) clamp(1rem, 3vw, 3rem) clamp(18rem, 34vw, 32rem);
+  min-height: 132vh;
+  padding: clamp(6.5rem, 10vw, 9rem) clamp(1rem, 3vw, 3rem) clamp(16rem, 30vw, 28rem);
   overflow: clip;
   background-color: #000000;
 }
@@ -127,8 +164,8 @@
 .heroCopy {
   position: relative;
   z-index: 10;
-  width: min(100%, 980px);
-  margin: 0 auto clamp(4.5rem, 9vw, 8rem);
+  width: min(100%, 900px);
+  margin: 0 auto clamp(3.5rem, 7vw, 6rem);
   text-align: center;
 }
 
@@ -142,12 +179,13 @@
   text-transform: uppercase;
 }
 
-.heroCopy h1 {
-  max-width: 940px;
+.heroCopy h1,
+.heroCopy h2 {
+  max-width: 860px;
   margin: 0 auto;
   color: #f5f3ef;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(58px, 8vw, 128px);
+  font-size: clamp(54px, 7vw, 110px);
   font-weight: 300;
   letter-spacing: -0.06em;
   line-height: 0.9;
@@ -155,7 +193,7 @@
 }
 
 .heroDescription {
-  margin: 2rem auto 0;
+  margin: 1.5rem auto 0;
   color: var(--work-muted);
   font-size: clamp(1rem, 1.5vw, 1.22rem);
   line-height: 1.65;
@@ -166,7 +204,7 @@
   min-height: 48px;
   align-items: center;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   padding: 0.8rem 1.35rem;
   border: 1px solid rgba(255, 255, 255, 0.32);
   border-radius: 999px;
@@ -188,11 +226,11 @@
 .heroFrameWrap {
   position: relative;
   z-index: 10;
-  width: min(1680px, calc(100vw - clamp(24px, 3vw, 56px)));
+  width: min(1560px, calc(100vw - clamp(40px, 6vw, 120px)));
   margin: 0 auto;
 }
 
-.browserFrame { height: clamp(520px, 61vw, 940px); }
+.browserFrame { height: clamp(480px, 54vw, 820px); }
 
 .browserViewport {
   height: 100%;
@@ -298,6 +336,10 @@
   object-fit: contain;
 }
 
+.showcaseFallbackItem img[src*="website-cro-audit"] {
+  object-fit: cover;
+}
+
 .showcaseFallbackItem figcaption {
   position: absolute;
   right: 12px;
@@ -382,6 +424,14 @@
   aspect-ratio: 1436 / 1095;
 }
 
+.selectedProjectCroAudit .selectedProjectImage {
+  aspect-ratio: 16 / 9;
+}
+
+.selectedProjectCroAudit .selectedProjectImage img {
+  object-fit: cover;
+}
+
 .selectedProjectRavco .selectedProjectImage {
   aspect-ratio: 1097 / 823;
 }
@@ -397,6 +447,37 @@
   object-fit: contain;
   border-radius: 0;
   transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.selectedProjectImageCollage {
+  position: relative;
+  overflow: hidden;
+  background: #090909;
+}
+
+.selectedProjectImageCollage .selectedProjectImagePrimary,
+.selectedProjectImageCollage .selectedProjectImageSecondary {
+  position: absolute;
+  height: auto;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.58);
+}
+
+.selectedProjectImageCollage .selectedProjectImagePrimary {
+  z-index: 1;
+  top: 5%;
+  left: 4%;
+  width: 68%;
+  aspect-ratio: 1436 / 1095;
+}
+
+.selectedProjectImageCollage .selectedProjectImageSecondary {
+  z-index: 2;
+  right: 4%;
+  bottom: 5%;
+  width: 58%;
+  aspect-ratio: 4 / 3;
 }
 
 .selectedProjectCopy { min-width: 0; }
@@ -520,6 +601,20 @@
   .selectedProjectImage:hover img { transform: scale(1.025); }
 }
 
+@media (max-width: 640px) {
+  .selectedProjectImageCollage .selectedProjectImagePrimary {
+    top: 6%;
+    left: 4%;
+    width: 74%;
+  }
+
+  .selectedProjectImageCollage .selectedProjectImageSecondary {
+    right: 4%;
+    bottom: 6%;
+    width: 64%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .selectedProjectImage img,
   .selectedProjectActions a {
@@ -527,6 +622,237 @@
   }
 
   .selectedProjectImage:hover img { transform: none; }
+}
+
+.selectedProjectsHeader { margin-bottom: clamp(3rem, 6vw, 5rem); }
+
+.selectedProjectGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+}
+
+.selectedProjectCard {
+  display: block;
+  min-width: 0;
+  color: #ffffff;
+  text-decoration: none;
+  outline: none;
+}
+
+.selectedProjectCardMedia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  background: #111111;
+}
+
+.selectedProjectCardImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.selectedProjectCardOverlay {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.08));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.selectedProjectCardLive {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.68rem 0.95rem;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #050505;
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1;
+  opacity: 0;
+  transform: translate(-50%, calc(-50% + 6px));
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.selectedProjectCardArrow {
+  position: absolute;
+  z-index: 2;
+  right: 1rem;
+  bottom: 1rem;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  opacity: 0;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: opacity 300ms ease;
+}
+
+.selectedProjectCardArrow svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.selectedProjectCardTitle {
+  margin: 0.8rem 0 0;
+  color: rgba(255, 255, 255, 0.84);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  transition: color 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .selectedProjectCard:hover .selectedProjectCardImage,
+  .selectedProjectCard:focus-visible .selectedProjectCardImage {
+    transform: scale(1.04);
+  }
+
+  .selectedProjectCard:hover .selectedProjectCardOverlay,
+  .selectedProjectCard:hover .selectedProjectCardLive,
+  .selectedProjectCard:hover .selectedProjectCardArrow,
+  .selectedProjectCard:focus-visible .selectedProjectCardOverlay,
+  .selectedProjectCard:focus-visible .selectedProjectCardLive,
+  .selectedProjectCard:focus-visible .selectedProjectCardArrow {
+    opacity: 1;
+  }
+
+  .selectedProjectCard:hover .selectedProjectCardLive,
+  .selectedProjectCard:focus-visible .selectedProjectCardLive {
+    transform: translate(-50%, -50%);
+  }
+
+  .selectedProjectCard:hover .selectedProjectCardTitle,
+  .selectedProjectCard:focus-visible .selectedProjectCardTitle {
+    color: #ffffff;
+  }
+
+  .selectedProjectCard:focus-visible .selectedProjectCardMedia {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+  }
+}
+
+@media (min-width: 700px) {
+  .selectedProjectGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1100px) {
+  .selectedProjectGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .selectedProjectCardImage,
+  .selectedProjectCardOverlay,
+  .selectedProjectCardLive,
+  .selectedProjectCardArrow,
+  .selectedProjectCardTitle {
+    transition: none;
+  }
+
+  .selectedProjectCard:hover .selectedProjectCardImage,
+  .selectedProjectCard:focus-visible .selectedProjectCardImage {
+    transform: none;
+  }
+}
+
+.selectedProjectsFullscreen {
+  position: relative;
+  width: 100%;
+  padding: clamp(2rem, 4vw, 4.5rem) clamp(1rem, 3.8vw, 4.5rem)
+    clamp(5rem, 10vw, 10rem);
+  background: #000000;
+}
+
+.selectedWorkFullscreenList {
+  display: grid;
+  width: min(100%, 1760px);
+  margin: 0 auto;
+  align-items: stretch;
+  gap: clamp(2rem, 6vw, 6rem);
+}
+
+.selectedWorkFullscreenItem {
+  display: grid;
+  width: 100%;
+  height: clamp(520px, 82svh, 960px);
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: #030303;
+  color: inherit;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 82svh;
+  text-decoration: none;
+}
+
+.selectedWorkFullscreenPicture {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.selectedWorkFullscreenImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+}
+
+.selectedWorkFullscreenItem:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 5px;
+}
+
+@media (max-width: 700px) {
+  .selectedProjectsFullscreen {
+    padding: 0.75rem 0.75rem 4rem;
+  }
+
+  .selectedWorkFullscreenList { gap: 1.5rem; }
+
+  .selectedWorkFullscreenItem {
+    height: clamp(340px, 68svh, 620px);
+    border-radius: 5px;
+    contain-intrinsic-size: auto 68svh;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .selectedWorkFullscreenItem {
+    height: calc(100svh - 1.5rem);
+    min-height: 280px;
+  }
 }
 
 .scrollStack {
@@ -702,6 +1028,12 @@
 }
 
 @media (max-width: 640px) {
+  .embeddedDivider {
+    right: 1rem;
+    left: 1rem;
+    font-size: 0.6875rem;
+  }
+
   .glassFrame {
     padding: 6px;
     border-radius: 20px;
@@ -728,7 +1060,8 @@
   }
 
   .heroCopy { margin-bottom: 4rem; }
-  .heroCopy h1 { font-size: clamp(2.9rem, 14vw, 4.5rem); }
+  .heroCopy h1,
+  .heroCopy h2 { font-size: clamp(2.9rem, 14vw, 4.5rem); }
   .heroDescription { font-size: 1rem; }
   .browserFrame { min-height: 440px; height: 64vh; }
 
