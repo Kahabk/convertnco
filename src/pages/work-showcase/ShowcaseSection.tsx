@@ -17,6 +17,12 @@ const items: FlexCarouselItem[] = [
     subtitle: "Conversion Research Tool",
   },
   {
+    src: "/images/portfolio/mpr-sportswear.webp",
+    alt: "Three MPR sportswear mobile storefront screens displayed over a purple landscape.",
+    title: "MPR Sportswear",
+    subtitle: "Mobile Sportswear Commerce",
+  },
+  {
     src: "/images/portfolio/moto-commerce.webp",
     alt: "Four mobile storefront screens for a motorcycle exhaust shop displayed over a red dusk landscape.",
     title: "Moto Commerce",
@@ -73,10 +79,16 @@ const items: FlexCarouselItem[] = [
   },
 ];
 
-function detectWebGL2() {
+function detectEnhancedCarousel() {
   if (typeof document === "undefined") return false;
 
   try {
+    if (
+      window.matchMedia(
+        "(max-width: 767px), (pointer: coarse), (prefers-reduced-motion: reduce)",
+      ).matches
+    ) return false;
+
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("webgl2");
     context?.getExtension("WEBGL_lose_context")?.loseContext();
@@ -100,10 +112,20 @@ function StaticShowcaseGrid() {
 }
 
 export default function ShowcaseSection() {
-  const [supportsWebGL2] = useState(detectWebGL2);
+  const [supportsWebGL2] = useState(detectEnhancedCarousel);
 
   return (
     <section className={styles.workGallerySection} aria-labelledby="selected-work-title">
+      <header className={styles.mobileShowcaseIntro}>
+        <p className={styles.mobileShowcaseEyebrow}>Independent Shopify design studio</p>
+        <h2>Shopify stores built to convert, not just launch.</h2>
+        <p className={styles.mobileShowcaseDescription}>
+          We design and build high-performance storefronts for ambitious brands.
+          Clearer journeys, stronger stories, and fewer reasons to leave.
+        </p>
+        <a className={styles.auditButton} href="/cro-audit">Get A Free Store Audit</a>
+      </header>
+
       <div className={styles.workGalleryInner}>
         <div
           className={styles.showcaseCarouselStage}

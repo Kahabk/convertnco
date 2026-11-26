@@ -9,6 +9,7 @@
 .featureSection { order: 1; }
 .projectsSection { order: 2; }
 .logoSection { order: 3; }
+.postHeroAfterLogo { order: 4; }
 .capabilitiesSection { order: 4; }
 .automationSection { order: 5; }
 .processSection { order: 6; }

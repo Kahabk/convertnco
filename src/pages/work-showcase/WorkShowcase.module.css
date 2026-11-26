@@ -21,38 +21,72 @@
 .embeddedPage {
   position: relative;
   scroll-margin-top: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  isolation: isolate;
+  border-top: 0;
 }
 
-.embeddedPage::before {
+.embeddedPage.heroOnlyPage::before {
   position: absolute;
   z-index: 30;
-  top: -1px;
+  top: -2px;
   right: 0;
   left: 0;
-  height: 180px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.035), transparent);
+  height: clamp(180px, 18vw, 340px);
+  background: linear-gradient(
+    to bottom,
+    #000000 0%,
+    rgba(0, 0, 0, 0.96) 14%,
+    rgba(0, 0, 0, 0.58) 52%,
+    transparent 100%
+  );
   content: "";
   pointer-events: none;
 }
 
-.embeddedDivider {
-  position: absolute;
-  z-index: 40;
-  top: 0;
-  right: clamp(1.25rem, 4vw, 4rem);
-  left: clamp(1.25rem, 4vw, 4rem);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 1.25rem;
-  color: rgba(255, 255, 255, 0.44);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  line-height: 1.3;
-  text-transform: uppercase;
-  pointer-events: none;
+.mobileShowcaseIntro { display: none; }
+
+@media (max-width: 767px) {
+  .embeddedPage.heroOnlyPage::before { display: none; }
+  .embeddedPage .workGallerySection { padding-top: 4rem; }
+
+  .mobileShowcaseIntro {
+    display: block;
+    width: min(100%, 34rem);
+    margin: 0 auto 4.5rem;
+    padding: 0 0.5rem;
+    text-align: center;
+  }
+
+  .mobileShowcaseEyebrow {
+    margin: 0 0 1.1rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.68rem;
+    font-weight: 620;
+    letter-spacing: 0.17em;
+    line-height: 1.45;
+    text-transform: uppercase;
+  }
+
+  .mobileShowcaseIntro h2 {
+    margin: 0;
+    color: #f5f3ef;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(3rem, 14vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+    text-wrap: balance;
+  }
+
+  .mobileShowcaseDescription {
+    max-width: 31rem;
+    margin: 1.5rem auto 0;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .mobileShowcaseIntro .auditButton { margin-top: 1.75rem; }
 }
 
 .page h1,
@@ -834,7 +868,7 @@
   outline-offset: 5px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 767px) {
   .selectedProjectsFullscreen {
     padding: 0.75rem 0.75rem 4rem;
   }
@@ -846,6 +880,21 @@
     border-radius: 5px;
     contain-intrinsic-size: auto 68svh;
   }
+
+  .showcaseFallback {
+    grid-auto-columns: min(82vw, 400px);
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-template-rows: 1fr;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .showcaseFallback::-webkit-scrollbar { display: none; }
+  .showcaseFallbackItem { scroll-snap-align: center; }
 }
 
 @media (max-width: 900px) and (orientation: landscape) {
@@ -1028,12 +1077,6 @@
 }
 
 @media (max-width: 640px) {
-  .embeddedDivider {
-    right: 1rem;
-    left: 1rem;
-    font-size: 0.6875rem;
-  }
-
   .glassFrame {
     padding: 6px;
     border-radius: 20px;
@@ -1075,16 +1118,6 @@
   .workGalleryHeader { margin-bottom: 2.5rem; }
 
   .showcaseCarouselStage { --showcase-carousel-height: clamp(560px, 78vh, 720px); }
-
-  .showcaseFallback {
-    grid-template-columns: repeat(5, 82vw);
-    grid-template-rows: 1fr;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scroll-snap-type: x mandatory;
-  }
-
-  .showcaseFallbackItem { scroll-snap-align: center; }
 
   .scrollStack { padding-top: 5rem; }
   .stackIntro { margin-bottom: 4rem; }

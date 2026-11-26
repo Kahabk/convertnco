@@ -10,6 +10,11 @@ const imagePresentation: Record<
     height: 2160,
     mobileImage: "/images/portfolio/website-cro-audit-mobile.webp",
   },
+  "mpr-sportswear-primary": {
+    width: 1672,
+    height: 941,
+    mobileImage: "/images/portfolio/mpr-sportswear-mobile.webp",
+  },
   "zipo-primary": {
     width: 1436,
     height: 1095,

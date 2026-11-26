@@ -41,11 +41,36 @@ function DeferredWorkSection({ children }: { children: ReactNode }) {
 
 type WorkExperienceProps = {
   embedded?: boolean;
+  sections?: "all" | "hero" | "gallery";
 };
 
-export function WorkExperience({ embedded = false }: WorkExperienceProps) {
+export function WorkExperience({
+  embedded = false,
+  sections = "all",
+}: WorkExperienceProps) {
+  const [isMobileViewport, setIsMobileViewport] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 767px)").matches
+      : false,
+  );
+
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+    const updateViewport = () => setIsMobileViewport(mobileQuery.matches);
+
+    updateViewport();
+    mobileQuery.addEventListener("change", updateViewport);
+    return () => mobileQuery.removeEventListener("change", updateViewport);
+  }, []);
+
+  useEffect(() => {
+    if (sections === "hero") return;
+
+    if (
+      window.matchMedia(
+        "(prefers-reduced-motion: reduce), (max-width: 767px), (pointer: coarse)",
+      ).matches
+    ) return;
 
     const lenis = new Lenis({
       lerp: 0.1,
@@ -64,26 +89,29 @@ export function WorkExperience({ embedded = false }: WorkExperienceProps) {
       window.cancelAnimationFrame(animationFrame);
       lenis.destroy();
     };
-  }, []);
+  }, [sections]);
+
+  const showShowcaseHero = sections !== "gallery" && (!embedded || !isMobileViewport);
+  const showGallery = sections !== "hero";
+
+  if (sections === "hero" && !showShowcaseHero) return null;
 
   return (
     <div
-      className={`${styles.page} ${embedded ? styles.embeddedPage : ""}`}
+      className={`${styles.page} ${embedded ? styles.embeddedPage : ""} ${sections === "hero" ? styles.heroOnlyPage : ""}`}
     >
-      {embedded && (
-        <div className={styles.embeddedDivider} aria-hidden="true">
-          <span>Selected work</span>
-          <span>Explore the studio</span>
-        </div>
+      {showShowcaseHero && <LiquidGlassFilter />}
+      {showShowcaseHero && <Hero headingLevel={embedded ? "h2" : "h1"} />}
+      {showGallery && (
+        <>
+          <DeferredWorkSection>
+            <ShowcaseSection />
+          </DeferredWorkSection>
+          <DeferredWorkSection>
+            <SelectedWorkSection />
+          </DeferredWorkSection>
+        </>
       )}
-      <LiquidGlassFilter />
-      <Hero headingLevel={embedded ? "h2" : "h1"} />
-      <DeferredWorkSection>
-        <ShowcaseSection />
-      </DeferredWorkSection>
-      <DeferredWorkSection>
-        <SelectedWorkSection />
-      </DeferredWorkSection>
     </div>
   );
 }

@@ -31,6 +31,15 @@ export const projects: PortfolioProject[] = [
     caseUrl: "/cro-audit",
   },
   {
+    id: "mpr-sportswear",
+    title: "MPR Sportswear",
+    category: "Mobile Sportswear Commerce",
+    description: "A bold mobile storefront concept for football shirts and performance sportswear, designed around fast product discovery and strong visual merchandising.",
+    tags: ["E-commerce", "Mobile Design", "UI/UX"],
+    image: "/images/portfolio/mpr-sportswear.webp",
+    imageAlt: "Three MPR sportswear mobile storefront screens displayed over a purple landscape",
+  },
+  {
     id: "zipo",
     title: "Zipo",
     category: "E-commerce Storefront",

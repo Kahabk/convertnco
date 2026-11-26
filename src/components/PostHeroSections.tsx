@@ -1,5 +1,5 @@
 import "./PostHeroSections.css";
-import { FormEvent } from "react";
+import { FormEvent, type ReactNode } from "react";
 import FigmaServiceCard from "./FigmaServiceCard";
 import PromoTicket from "./PromoTicket";
 import { Link } from "react-router-dom";
@@ -77,9 +77,13 @@ const PROCESS = [
 
 type PostHeroSectionsProps = {
   showPortfolio?: boolean;
+  afterLogo?: ReactNode;
 };
 
-export default function PostHeroSections({ showPortfolio = true }: PostHeroSectionsProps) {
+export default function PostHeroSections({
+  showPortfolio = true,
+  afterLogo,
+}: PostHeroSectionsProps) {
   const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -175,6 +179,8 @@ export default function PostHeroSections({ showPortfolio = true }: PostHeroSecti
           </div>
         </div>
       </section>
+
+      {afterLogo ? <div className="postHeroAfterLogo">{afterLogo}</div> : null}
 
       <section className="capabilitiesSection" id="services">
         <header className="capabilitiesIntro">

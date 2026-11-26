@@ -68,10 +68,13 @@ function HomePage() {
       <PolaroidTrailHero />
       <main>
         <DeferredSection id="works" minHeight="100vh">
-          <WorkExperience embedded />
+          <WorkExperience embedded sections="gallery" />
         </DeferredSection>
         <Suspense fallback={null}>
-          <PostHeroSections showPortfolio={false} />
+          <PostHeroSections
+            showPortfolio={false}
+            afterLogo={<WorkExperience embedded sections="hero" />}
+          />
         </Suspense>
       </main>
     </div>
