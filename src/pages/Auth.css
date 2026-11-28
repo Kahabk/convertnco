@@ -38,6 +38,15 @@
   margin-bottom: 28px;
 }
 
+.authEyebrow {
+  margin: 0 0 10px;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .authTitle {
   margin: 0 0 8px;
   font-family: 'Cormorant Garamond', Georgia, serif;
@@ -116,7 +125,7 @@
 }
 
 .authField span {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -146,6 +155,53 @@
   color: rgba(255, 255, 255, 0.2);
 }
 
+.authPasswordInput {
+  position: relative;
+}
+
+.authPasswordInput input {
+  padding-right: 68px;
+}
+
+.authPasswordInput button {
+  position: absolute;
+  inset: 0 12px 0 auto;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.58);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.authPasswordInput button:hover {
+  color: #f5f3ef;
+}
+
+.authPasswordRules {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+}
+
+.authPasswordRules li::before {
+  content: '○';
+  display: inline-block;
+  width: 18px;
+}
+
+.authPasswordRules li[data-valid='true'] {
+  color: #86efac;
+}
+
+.authPasswordRules li[data-valid='true']::before {
+  content: '✓';
+}
+
 /* Forgot password link */
 .authForgot {
   text-align: right;
@@ -160,7 +216,7 @@
   border: 1px solid rgba(185, 28, 28, 0.3);
   border-radius: 8px;
   color: #fca5a5;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.4;
 }
 
@@ -171,7 +227,7 @@
   border: 1px solid rgba(22, 163, 74, 0.3);
   border-radius: 8px;
   color: #86efac;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.4;
 }
 
@@ -199,6 +255,60 @@
   opacity: 0.5;
   cursor: default;
   transform: none;
+}
+
+.authButtonLink {
+  display: block;
+  box-sizing: border-box;
+  text-align: center;
+  text-decoration: none;
+}
+
+.authActionCard {
+  max-width: 460px;
+}
+
+.authActionStack {
+  display: grid;
+  gap: 18px;
+}
+
+.authActionCopy {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.authActionStatus {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 14px;
+}
+
+.authActionStatus p {
+  margin: 0;
+}
+
+.authSpinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  border-top-color: #f5f3ef;
+  border-radius: 50%;
+  animation: authSpin 0.8s linear infinite;
+}
+
+@keyframes authSpin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .authSpinner {
+    animation-duration: 1.8s;
+  }
 }
 
 /* Link buttons */

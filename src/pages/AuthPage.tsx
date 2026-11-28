@@ -16,7 +16,10 @@ export default function AuthPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const returnTo = params.get('returnTo') || '/cro-audit';
+  const requestedReturnTo = params.get('returnTo');
+  const returnTo = requestedReturnTo?.startsWith('/') && !requestedReturnTo.startsWith('//')
+    ? requestedReturnTo
+    : '/cro-audit';
   const auditUrl = params.get('url');
   const destination = `${returnTo}${auditUrl ? `?url=${encodeURIComponent(auditUrl)}` : ''}`;
   const [mode, setMode] = useState<AuthMode>('signin');
@@ -26,7 +29,9 @@ export default function AuthPage() {
   const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [success, setSuccess] = useState(
+    params.get('reset') === 'success' ? 'Password updated. Sign in with your new password.' : '',
+  );
 
   const clear = () => { setError(''); setSuccess(''); };
   const switchMode = (m: AuthMode) => { setMode(m); clear(); };
@@ -45,11 +50,19 @@ export default function AuthPage() {
         await signInWithEmail(email, password);
         navigate(destination);
       } else {
-        await resetPassword(email);
-        setSuccess('Password reset email sent! Check your inbox.');
+        try {
+          await resetPassword(email);
+        } catch {
+          // Always return the same response so this form cannot reveal accounts.
+        }
+        setSuccess('If an account exists for that email, a reset link is on its way.');
       }
     } catch (err: any) {
-      setError(friendlyError(err.code || err.message));
+      if (mode === 'reset') {
+        setSuccess('If an account exists for that email, a reset link is on its way.');
+      } else {
+        setError(friendlyError(err.code || err.message));
+      }
     } finally {
       setLoading(false);
     }
