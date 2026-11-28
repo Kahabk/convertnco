@@ -17,9 +17,35 @@ export async function requireUser(req: VercelRequest) {
     const { payload } = await jwtVerify(token, JWKS, {
       issuer: `https://securetoken.google.com/${projectId}`,
       audience: projectId,
+      algorithms: ['RS256'],
+      clockTolerance: 5,
     });
-    return { uid: payload.sub as string, email: (payload as any).email as string | undefined };
+    if (typeof payload.sub !== 'string' || !payload.sub || payload.sub.length > 128) {
+      throw new Error('Invalid Firebase subject');
+    }
+    return {
+      uid: payload.sub,
+      email: (payload as any).email as string | undefined,
+      emailVerified: Boolean((payload as any).email_verified),
+    };
   } catch {
     throw new HttpError(401, 'Session expired, please sign in again');
   }
+}
+
+export async function requireAdmin(req: VercelRequest) {
+  const user = await requireUser(req);
+  const allowedEmail = (process.env.ADMIN_EMAIL || 'kahabhns@gmail.com').trim().toLowerCase();
+  const expectedUid = process.env.ADMIN_FIREBASE_UID?.trim();
+  const email = user.email?.trim().toLowerCase();
+
+  if (!user.emailVerified) {
+    throw new HttpError(403, 'Verify the admin email before continuing');
+  }
+
+  if (!email || email !== allowedEmail || (expectedUid && user.uid !== expectedUid)) {
+    throw new HttpError(403, 'Admin access required');
+  }
+
+  return user;
 }

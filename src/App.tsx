@@ -12,6 +12,7 @@ const PostHeroSections = lazy(() => import('./components/PostHeroSections'));
 const TermsAndConditions = lazy(() => import('./pages/TermsAndCondition'));
 const CroAudit = lazy(() => import('./pages/CroAudit'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
 const WorkExperience = lazy(() =>
   import('./pages/Work').then((module) => ({ default: module.WorkExperience })),
 );
@@ -90,6 +91,7 @@ export default function App() {
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/cro-audit"          element={<CroAudit />} />
           <Route path="/auth"               element={<AuthPage />} />
+          <Route path="/admin"              element={<AdminPage />} />
           <Route path="/work"               element={<WorkCatalogue />} />
           {/* Legacy / alias routes */}
           <Route path="/sign-in"            element={<AuthPage />} />

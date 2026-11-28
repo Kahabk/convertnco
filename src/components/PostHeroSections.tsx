@@ -1,8 +1,9 @@
 import "./PostHeroSections.css";
-import { FormEvent, type ReactNode } from "react";
+import { FormEvent, useState, type ReactNode } from "react";
 import FigmaServiceCard from "./FigmaServiceCard";
 import PromoTicket from "./PromoTicket";
 import { Link } from "react-router-dom";
+import { submitEnquiry } from "../lib/enquiryApi";
 const CONTACT_EMAIL = "kahabhns@gmail.com";
 const BASE_URL = import.meta.env.BASE_URL ?? '';
 
@@ -84,30 +85,34 @@ export default function PostHeroSections({
   showPortfolio = true,
   afterLogo,
 }: PostHeroSectionsProps) {
-  const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
 
-    const data = new FormData(event.currentTarget);
+  const handleContactSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
     const name = String(data.get("name") || "").trim();
     const email = String(data.get("email") || "").trim();
     const company = String(data.get("company") || "").trim();
     const service = String(data.get("service") || "").trim();
     const budget = String(data.get("budget") || "").trim();
     const project = String(data.get("project") || "").trim();
+    const website = String(data.get("website") || "").trim();
 
-    const subject = company ? `Project enquiry from ${company}` : "Project enquiry";
-    const body = [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      company && `Company: ${company}`,
-      service && `Service: ${service}`,
-      budget && `Budget: ${budget}`,
-      "",
-      "Project:",
-      project,
-    ].filter(Boolean).join("\n");
-
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setIsSubmitting(true);
+    setSubmitError("");
+    setSubmitSuccess("");
+    try {
+      await submitEnquiry({ name, email, company, service, budget, message: project, website });
+      form.reset();
+      setSubmitSuccess("Thanks — your enquiry has been saved. We’ll get back to you shortly.");
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Could not send your enquiry. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -283,6 +288,10 @@ export default function PostHeroSections({
         </div>
 
         <form className="contactForm" onSubmit={handleContactSubmit}>
+          <label className="contactHoneypot" aria-hidden="true">
+            <span>Website</span>
+            <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+          </label>
           <label className="contactField">
             <span>Your name</span>
             <span className="glowInputShell">
@@ -325,7 +334,11 @@ export default function PostHeroSections({
               <textarea name="project" placeholder="Goals, challenges and timeline..." required />
             </span>
           </label>
-          <button className="contactSubmit" type="submit"><span>Send enquiry</span><span>{"\u2197\uFE0E"}</span></button>
+          <button className="contactSubmit" type="submit" disabled={isSubmitting}>
+            <span>{isSubmitting ? "Saving enquiry…" : "Send enquiry"}</span>
+          </button>
+          {submitSuccess && <p className="contactFormStatus contactFormSuccess" role="status">{submitSuccess}</p>}
+          {submitError && <p className="contactFormStatus contactFormError" role="alert">{submitError}</p>}
         </form>
       </section>
 

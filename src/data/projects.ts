@@ -20,17 +20,6 @@ const pottedHeadScene = new URL(
 
 export const projects: PortfolioProject[] = [
   {
-    id: "website-cro-audit",
-    title: "Website CRO Audit",
-    category: "Conversion Research Tool",
-    description: "A focused desktop and mobile audit experience that turns storefront friction into practical, prioritized fixes.",
-    tags: ["CRO", "UX Audit", "Conversion Strategy"],
-    image: "/images/portfolio/website-cro-audit.webp",
-    imageAlt: "Website CRO Audit displayed on a MacBook resting on a dark stone landscape",
-    liveUrl: "/cro-audit",
-    caseUrl: "/cro-audit",
-  },
-  {
     id: "mpr-sportswear",
     title: "MPR Sportswear",
     category: "Mobile Sportswear Commerce",

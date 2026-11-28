@@ -5,11 +5,6 @@ const imagePresentation: Record<
   string,
   { width: number; height: number; mobileImage: string }
 > = {
-  "website-cro-audit-primary": {
-    width: 3840,
-    height: 2160,
-    mobileImage: "/images/portfolio/website-cro-audit-mobile.webp",
-  },
   "mpr-sportswear-primary": {
     width: 1672,
     height: 941,

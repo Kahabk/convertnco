@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  sendEmailVerification,
   updateProfile,
   type User,
 } from 'firebase/auth';
@@ -43,5 +44,8 @@ export const signInWithEmail = (email: string, password: string) =>
 
 export const resetPassword = (email: string) =>
   sendPasswordResetEmail(auth, email);
+
+export const sendVerification = (user: User) =>
+  sendEmailVerification(user);
 
 export type { User };

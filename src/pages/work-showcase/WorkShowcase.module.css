@@ -370,10 +370,6 @@
   object-fit: contain;
 }
 
-.showcaseFallbackItem img[src*="website-cro-audit"] {
-  object-fit: cover;
-}
-
 .showcaseFallbackItem figcaption {
   position: absolute;
   right: 12px;
@@ -456,14 +452,6 @@
 
 .selectedProjectFeatured .selectedProjectImage {
   aspect-ratio: 1436 / 1095;
-}
-
-.selectedProjectCroAudit .selectedProjectImage {
-  aspect-ratio: 16 / 9;
-}
-
-.selectedProjectCroAudit .selectedProjectImage img {
-  object-fit: cover;
 }
 
 .selectedProjectRavco .selectedProjectImage {

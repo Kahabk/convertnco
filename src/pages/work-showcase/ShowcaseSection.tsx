@@ -11,12 +11,6 @@ const pottedHeadScene = new URL(
 
 const items: FlexCarouselItem[] = [
   {
-    src: "/images/portfolio/website-cro-audit.webp",
-    alt: "Website CRO Audit displayed on a MacBook resting on a dark stone landscape.",
-    title: "Website CRO Audit",
-    subtitle: "Conversion Research Tool",
-  },
-  {
     src: "/images/portfolio/mpr-sportswear.webp",
     alt: "Three MPR sportswear mobile storefront screens displayed over a purple landscape.",
     title: "MPR Sportswear",

@@ -1,0 +1,306 @@
+.adminLoginPage,
+.adminPage,
+.adminLoading {
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: #070707;
+  color: #f5f3ef;
+}
+
+.adminLoading {
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.adminLoginPage {
+  display: grid;
+  place-items: center;
+  padding: 5rem 1.25rem;
+}
+
+.adminBackLink {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.adminLoginCard {
+  width: min(100%, 460px);
+  padding: clamp(2rem, 5vw, 3.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #0e0e0e;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.48);
+}
+
+.adminEyebrow,
+.adminEnquiryDate {
+  margin: 0 0 0.8rem;
+  color: rgba(255, 255, 255, 0.44);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.adminLoginCard h1,
+.adminHeader h1 {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 300;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+}
+
+.adminLoginCard > p:not(.adminEyebrow) {
+  margin: 1.25rem 0 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.adminLoginForm {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.adminLoginForm label {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.adminLoginForm label span {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.adminLoginForm input {
+  min-height: 52px;
+  padding: 0 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0;
+  outline: none;
+  background: #080808;
+  color: #ffffff;
+  font: inherit;
+}
+
+.adminLoginForm input:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.adminLoginForm input[readonly] {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.adminLoginCard button,
+.adminHeaderActions button {
+  min-height: 48px;
+  padding: 0.75rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0;
+  background: #f5f3ef;
+  color: #080808;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.adminLoginCard button:disabled,
+.adminHeaderActions button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.adminLoginCard .adminTextButton {
+  min-height: auto;
+  padding: 0.5rem;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.adminMessage {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.adminError {
+  border-color: rgba(252, 165, 165, 0.3);
+  background: rgba(185, 28, 28, 0.14);
+  color: #fecaca;
+}
+
+.adminNotice {
+  border-color: rgba(134, 239, 172, 0.3);
+  background: rgba(22, 163, 74, 0.14);
+  color: #bbf7d0;
+}
+
+.adminPage {
+  padding: clamp(2rem, 5vw, 5rem);
+}
+
+.adminHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto 4rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.adminHeader > div > p:last-child {
+  margin: 1rem 0 0;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.adminHeaderActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.adminHeaderActions button:last-child {
+  background: transparent;
+  color: #ffffff;
+}
+
+.adminPage > .adminMessage,
+.adminEnquiryList,
+.adminEmpty {
+  width: min(100%, 1400px);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.adminEnquiryList {
+  display: grid;
+  gap: 1rem;
+}
+
+.adminEnquiryCard {
+  padding: clamp(1.4rem, 3vw, 2.4rem);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #0d0d0d;
+}
+
+.adminEnquiryCard > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.adminEnquiryCard h2 {
+  margin: 0;
+  color: #ffffff;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300;
+  letter-spacing: -0.035em;
+}
+
+.adminEnquiryCard header a {
+  display: inline-block;
+  margin-top: 0.45rem;
+  color: rgba(255, 255, 255, 0.68);
+  text-underline-offset: 3px;
+}
+
+.adminStatus {
+  padding: 0.45rem 0.7rem;
+  border: 1px solid rgba(134, 239, 172, 0.28);
+  color: #bbf7d0;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.adminEnquiryMeta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 2rem 0 0;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.adminEnquiryMeta div {
+  padding: 1rem;
+  background: #0d0d0d;
+}
+
+.adminEnquiryMeta dt,
+.adminEnquiryMessage h3 {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.adminEnquiryMeta dd {
+  margin: 0.45rem 0 0;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.adminEnquiryMessage {
+  margin-top: 1.75rem;
+}
+
+.adminEnquiryMessage h3 {
+  margin: 0;
+}
+
+.adminEnquiryMessage p {
+  margin: 0.75rem 0 0;
+  max-width: 900px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.adminEmpty {
+  padding: 5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.adminEmpty h2 {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 3rem;
+  font-weight: 300;
+}
+
+.adminEmpty p {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 700px) {
+  .adminBackLink { top: 1.25rem; left: 1.25rem; }
+  .adminHeader { align-items: flex-start; flex-direction: column; }
+  .adminHeaderActions { width: 100%; }
+  .adminHeaderActions button { flex: 1; }
+  .adminEnquiryMeta { grid-template-columns: 1fr; }
+  .adminEnquiryCard > header { gap: 1rem; }
+}

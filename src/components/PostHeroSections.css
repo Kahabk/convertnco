@@ -992,6 +992,14 @@
   gap: 28px 24px;
 }
 
+.contactHoneypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .contactField {
   display: flex;
   flex-direction: column;
@@ -1096,6 +1104,38 @@
 .contactSubmit:hover {
   background: transparent;
   color: #fff;
+}
+
+.contactSubmit:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.contactSubmit:disabled:hover {
+  background: #f5f5f2;
+  color: #080808;
+}
+
+.contactFormStatus {
+  grid-column: 1 / -1;
+  margin: -8px 0 0;
+  padding: 14px 16px;
+  border: 1px solid;
+  font: 500 0.875rem/1.5 "Inter", sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.contactFormSuccess {
+  border-color: rgba(134, 239, 172, 0.34);
+  background: rgba(22, 163, 74, 0.12);
+  color: #bbf7d0;
+}
+
+.contactFormError {
+  border-color: rgba(252, 165, 165, 0.34);
+  background: rgba(185, 28, 28, 0.12);
+  color: #fecaca;
 }
 
 .siteFooter {

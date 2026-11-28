@@ -29,7 +29,8 @@ A responsive, motion-led agency website for Shopify development, AI automation, 
 - Service, process, automation, and case-study sections
 - Animated Figma-style capability graphic
 - Holographic promotional ticket (display-only demo)
-- Responsive contact form with direct email link
+- Supabase-backed enquiry form with validation and spam protection
+- Private admin dashboard for reviewing saved form responses
 - Mobile layouts and reduced-motion support
 - High qulty primum web
 
@@ -40,10 +41,29 @@ A responsive, motion-led agency website for Shopify development, AI automation, 
 - Tailwind CSS 4
 - CSS animations and responsive layouts
 
-## add full mangment admin pnal will add soon 
-- futur agntic plaatform all so add 
-- futi workfullow will add
-- new adding
+## Enquiry admin setup
+
+The contact form saves responses through `/api/enquiries` into Supabase. The
+browser never receives the Supabase service-role key or direct table access.
+
+1. Run [`supabase/enquiries.sql`](supabase/enquiries.sql) in Supabase SQL Editor.
+2. Enable Email/Password in Firebase Authentication.
+3. Create the Firebase user `kahabhns@gmail.com`, choose a strong unique
+   password, and verify that email address.
+4. Configure the server variables from `.env.example`, especially
+   `FIREBASE_PROJECT_ID`, `SUPABASE_URL`, a Supabase
+   `SUPABASE_SECRET_KEY` (or the legacy `SUPABASE_SERVICE_ROLE_KEY`), and
+   `ADMIN_EMAIL`. Set `ADMIN_FIREBASE_UID` to the UID shown for that Firebase
+   user to lock access to one exact account. `RATE_LIMIT_SALT` may be set to a
+   separate random server secret; otherwise the Supabase server key is used for
+   the HMAC.
+5. Open `/admin` and sign in. Passwords are managed by Firebase and are never
+   stored in this repository or Supabase.
+
+The enquiry endpoint accepts same-origin JSON only, rejects oversized or
+malformed fields, applies atomic per-IP and per-email limits, and stores only
+HMAC hashes for rate limiting. Supabase RLS and explicit grants deny the
+`anon` and `authenticated` roles; elevated keys stay server-side.
   
 ## Run locally
 
@@ -87,5 +107,3 @@ t.jpg                         Featured banner image
 - Add or update recent-work screenshots in `web_aset/`, then update the `PROJECTS` list.
 - Add partner logos in `logos/`, then update the `LOGOS` list.
 - Hero trail imagery is configured in `PolaroidTrailHero.tsx`.
-
-

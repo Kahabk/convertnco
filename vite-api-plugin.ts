@@ -27,7 +27,7 @@ export function vercelApiPlugin(): Plugin {
         // Parse JSON body for POST / PUT / PATCH (capped at 1MB to prevent memory exhaustion DoS)
         let body: any = {};
         if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
-          const MAX_BODY_SIZE = 1024 * 1024; // 1 MB
+          const MAX_BODY_SIZE = pathname === '/api/enquiries' ? 32 * 1024 : 1024 * 1024;
           let receivedBytes = 0;
           const buffers: Buffer[] = [];
           for await (const chunk of req) {
@@ -74,6 +74,13 @@ export function vercelApiPlugin(): Plugin {
         };
 
         try {
+          // Route 0: /api/enquiries
+          if (pathname === '/api/enquiries' || pathname === '/api/enquiries/') {
+            const mod = await server.ssrLoadModule('/api/enquiries/index.ts');
+            await mod.default(req, res);
+            return;
+          }
+
           // Route 1: /api/audits/:id/process
           const processMatch = pathname.match(/^\/api\/audits\/([^/]+)\/process\/?$/);
           if (processMatch) {
@@ -103,7 +110,7 @@ export function vercelApiPlugin(): Plugin {
         } catch (err: any) {
           console.error(`[API Error] ${pathname}:`, err);
           if (!res.headersSent) {
-            res.status(500).json({ error: err.message || 'Internal server error' });
+            res.status(500).json({ error: 'Internal server error' });
           }
         }
       });
